@@ -9,6 +9,7 @@ ext{
     rxKotlinVersion = "2.1.0"
     gsonVersion = "2.6.2"
     retrofitLibVersion = "2.1.0"
+    retrofitAdapterLibVersion = "2.3.0"
     okhttpLibVersion = "3.4.2"
     supportVersion = "25.3.1"
     constraintLayoutVersion = "1.0.2"
@@ -21,7 +22,7 @@ ext{
             gson                    :   "com.google.code.gson:gson:$gsonVersion",
             retrofit                :   "com.squareup.retrofit2:retrofit:$retrofitLibVersion",
             retrofitGsonConverter   :   "com.squareup.retrofit2:converter-gson:$retrofitLibVersion",
-            retrofitRxjavaAdapter   :   "com.squareup.retrofit2:adapter-rxjava:$retrofitLibVersion",
+            retrofitRxjavaAdapter   :   "com.squareup.retrofit2:adapter-rxjava2:$retrofitAdapterLibVersion",
             okhttp3                 :   "com.squareup.okhttp3:okhttp:$okhttpLibVersion",
             design                  :   "com.android.support:design:$supportVersion",
             appcompat_v7            :   "com.android.support:appcompat-v7:$supportVersion",
