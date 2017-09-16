@@ -23,7 +23,7 @@ class LauncherActivity : BaseActivity(){
     private var container:View? =null
 
     object MainData{
-        val fragmentList = arrayOf(HomeFrament())
+        val fragmentList = arrayOf(HomeFrament(),GirdFrament(),UserFrament())
     }
 
 
@@ -48,10 +48,10 @@ class LauncherActivity : BaseActivity(){
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         Log.d("mOnNavigatior","oder id->"+item.order)
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.content,MainData.fragmentList[item.order]).commit()
         when (item.itemId) {
             R.id.navigation_home -> {
-                val transaction = supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.content,MainData.fragmentList[item.order]).commit()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard ->{
