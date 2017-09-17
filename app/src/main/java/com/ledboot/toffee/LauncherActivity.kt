@@ -6,31 +6,24 @@ import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 import com.ledboot.toffee.base.BaseActivity
-import com.ledboot.toffee.model.Topics
-import org.json.JSONArray
-import java.util.*
+import kotlinx.android.synthetic.main.activity_launcher.*
+import kotlinx.android.synthetic.main.content_launcher.*
 
 class LauncherActivity : BaseActivity() {
 
-
+    val TAG: String = LauncherActivity::class.java.simpleName
     private var toolbar: Toolbar? = null
-    private var bottomNavigation: BottomNavigationView? = null
     private var drawer: DrawerLayout? = null
-    private var sideNavigationView: NavigationView? = null
     private var container: View? = null
 
-    object MainData{
-        val fragmentList = arrayOf(HomeFrament(),GirdFrament(),UserFrament())
+    object MainData {
+        val fragmentList = arrayOf(HomeFrament(), GirdFrament(), UserFrament())
     }
 
 
@@ -43,20 +36,21 @@ class LauncherActivity : BaseActivity() {
     private fun initView() {
         container = findViewById(R.id.content)
         toolbar = findViewById(R.id.toolbar) as Toolbar
-        bottomNavigation = (findViewById(R.id.navigation) as BottomNavigationView).apply { setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener) }
-        sideNavigationView = (findViewById(R.id.nav_view) as NavigationView).apply { setNavigationItemSelectedListener(mSideNavigationItemSeletedListener) }
+        navigation.apply { setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener) }
+        nav_view.apply { setNavigationItemSelectedListener(mSideNavigationItemSeletedListener) }
         setSupportActionBar(toolbar)
         drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         val toggle = ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer?.apply { addDrawerListener(toggle) }
         toggle.syncState()
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.content, MainData.fragmentList[0]).commit()
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        Log.d("mOnNavigatior","oder id->"+item.order)
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.content,MainData.fragmentList[item.order]).commit()
+        Log.d("mOnNavigatior", "oder id->" + item.order)
+
         when (item.itemId) {
             R.id.navigation_home -> {
                 return@OnNavigationItemSelectedListener true
