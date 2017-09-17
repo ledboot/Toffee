@@ -1,24 +1,14 @@
 package com.ledboot.toffee.model
 
-import org.json.JSONArray
-import java.util.*
+import com.google.gson.annotations.SerializedName
 
 /**
- * Created by Gwynn on 17/9/5.
+ * Created by Gwynn on 17/9/6.
  */
 
-data class Topics(
-        val id:String,
-        val authorId:String,
-        val tab:String,
-        val content:String,
-        val title:String,
-        val lastReplyAt:Date,
-        val good:Boolean,
-        val top:Boolean,
-        val replyCount:Int,
-        val createAt:Date,
-        val author:JSONArray
-){
-
+data class Topic(var id: String, var authorId: String, var tab: String,
+                 var content: String, var title: String, var lastReplyAt: String,
+                 var good: Boolean, var top: Boolean, var replyCount: Int,
+                 var visitCount: Int, var createAt: String, var author: Author) {
+    data class Author(@SerializedName("loginname") var loginName: String, var avatarUrl: String)
 }
