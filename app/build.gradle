@@ -52,6 +52,7 @@ dependencies {
     compile dependencies.constraint_layout
     compile dependencies.glide
     compile dependencies.supportAnnotation
+    compile dependencies.cardView
 //    kapt dependencies.glideCompiler
 
 }

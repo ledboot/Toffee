@@ -44,13 +44,13 @@ class LauncherActivity : BaseActivity() {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer?.apply { addDrawerListener(toggle) }
         toggle.syncState()
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.content, MainData.fragmentList[0]).commit()
+
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         Log.d("mOnNavigatior", "oder id->" + item.order)
-
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.content, MainData.fragmentList[item.order]).commit()
         when (item.itemId) {
             R.id.navigation_home -> {
                 return@OnNavigationItemSelectedListener true

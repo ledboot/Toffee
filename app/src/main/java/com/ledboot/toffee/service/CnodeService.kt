@@ -17,7 +17,8 @@ interface CnodeService {
     @GET("{path}")
     fun topicsList(@Path("path") path: String,
                    @Query("page") page: Int,
-                   @Query("limit") limit: Int): Flowable<Topics>
+                   @Query("limit") limit: Int,
+                   @Query("mdrender") mdrender: Boolean): Flowable<Topics>
 
     @GET("{path}")
     fun getCategory(@Path("path") path: String): Flowable<List<Categories>>
