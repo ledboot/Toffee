@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.ledboot.toffee.adapter.LaucherPageAdapter
 import com.ledboot.toffee.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_launcher.*
 import kotlinx.android.synthetic.main.content_launcher.*
@@ -20,10 +21,11 @@ class LauncherActivity : BaseActivity() {
     val TAG: String = LauncherActivity::class.java.simpleName
     private var toolbar: Toolbar? = null
     private var drawer: DrawerLayout? = null
-    private var container: View? = null
+
+    val laucherAdapter by lazy { LaucherPageAdapter(this, supportFragmentManager, MainData.fragmentList) }
 
     object MainData {
-        val fragmentList = arrayOf(HomeFrament(), GirdFrament(), UserFrament())
+        val fragmentList = arrayOf(HomeFrament(), GirlFrament(), UserFrament())
     }
 
 
@@ -34,7 +36,6 @@ class LauncherActivity : BaseActivity() {
     }
 
     private fun initView() {
-        container = findViewById(R.id.content)
         toolbar = findViewById(R.id.toolbar) as Toolbar
         navigation.apply { setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener) }
         nav_view.apply { setNavigationItemSelectedListener(mSideNavigationItemSeletedListener) }
@@ -44,13 +45,14 @@ class LauncherActivity : BaseActivity() {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer?.apply { addDrawerListener(toggle) }
         toggle.syncState()
-
+        view_page.adapter = laucherAdapter
+        view_page.offscreenPageLimit = 3
+        view_page.setCurrentItem(0)
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         Log.d("mOnNavigatior", "oder id->" + item.order)
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.content, MainData.fragmentList[item.order]).commit()
         when (item.itemId) {
             R.id.navigation_home -> {
                 return@OnNavigationItemSelectedListener true
