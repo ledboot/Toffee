@@ -3,6 +3,7 @@ package com.ledboot.toffee.network
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.ledboot.toffee.service.BenefitService
 import com.ledboot.toffee.service.CnodeService
 import com.ledboot.toffee.utils.Debuger
 import okhttp3.Interceptor
@@ -18,14 +19,16 @@ import java.util.concurrent.TimeUnit
 object Retrofits {
 
     open val TAG: String = Retrofits::class.java.simpleName
-    private val retrofit: Retrofit
+    private var retrofit: Retrofit? = null
     private val okHttpClient: OkHttpClient
     private val DEFAULT_TIMEOUT = 5L
 
-    init {
+    private val baseUrlKy = "http://baobab.kaiyanapp.com/api/v4/"
+    private val baseUrlCnode = "https://cnodejs.org/api/v1/"
+    private val baseUrlBenefit = "http://gank.io/api/"
+    private var retroftBuilder: Retrofit.Builder
 
-        val baseUrlKy = "http://baobab.kaiyanapp.com/api/v4/"
-        val baseUrlCnode = "https://cnodejs.org/api/v1/"
+    init {
         val logging = Interceptor { chain ->
             val request = chain.request()
             Debuger.logD(TAG, "okhttp --- > " + request.url())
@@ -40,15 +43,23 @@ object Retrofits {
                 .addInterceptor(logging)
                 .build()
 
-        retrofit = Retrofit.Builder()
+//        retrofit = Retrofit.Builder()
+//                .client(okHttpClient)
+//                .addConverterFactory(GsonConverterFactory.create(gson))
+//                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//                .baseUrl(baseUrlCnode)
+//                .build()
+        retroftBuilder = Retrofit.Builder()
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .baseUrl(baseUrlCnode)
-                .build()
     }
 
     val cnodeService: CnodeService by lazy {
-        retrofit.create(CnodeService::class.java)
+        retroftBuilder.baseUrl(baseUrlCnode).build().create(CnodeService::class.java)
+    }
+
+    val benefitService: BenefitService by lazy {
+        retroftBuilder.baseUrl(baseUrlBenefit).build().create(BenefitService::class.java)
     }
 }

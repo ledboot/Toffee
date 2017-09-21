@@ -23,4 +23,7 @@ class UserFrament:BaseFrament() {
         super.onUserVisible()
     }
 
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+    }
 }

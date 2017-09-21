@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.ledboot.toffee.adapter.HomeListAdapter
 import com.ledboot.toffee.base.BaseFrament
 import com.ledboot.toffee.model.Topics
@@ -19,13 +20,14 @@ import kotlinx.android.synthetic.main.fra_home.view.*
 
 class HomeFrament : BaseFrament() {
 
-    var TAG: String = HomeFrament::class.java.simpleName
+    private var TAG: String = HomeFrament::class.java.simpleName
 
     var dataList: List<Topics.Data>? = null
 
     val adapter by lazy { HomeListAdapter(context) }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
         val view = inflater!!.inflate(R.layout.fra_home, container, false)
         initView(view)
         return view
@@ -47,13 +49,25 @@ class HomeFrament : BaseFrament() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ topics ->
-                    for( data:Topics.Data in topics.data){
+                    for (data: Topics.Data in topics.data) {
                         data.handleContent()
                     }
                     adapter.setData(topics.data)
+                }, {
+                    it.printStackTrace()
+                    Toast.makeText(context, "error msg = ${it.message}", Toast.LENGTH_SHORT).show()
                 })
     }
 
+    override fun onFirstUserVisible() {
+        super.onFirstUserVisible()
+    }
 
+    override fun onUserVisible() {
+        super.onUserVisible()
+    }
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+    }
 }
 
