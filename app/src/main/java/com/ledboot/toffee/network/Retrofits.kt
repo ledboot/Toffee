@@ -3,8 +3,8 @@ package com.ledboot.toffee.network
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.ledboot.toffee.service.BenefitService
 import com.ledboot.toffee.service.CnodeService
+import com.ledboot.toffee.service.GankIoService
 import com.ledboot.toffee.utils.Debuger
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -19,16 +19,17 @@ import java.util.concurrent.TimeUnit
 object Retrofits {
 
     open val TAG: String = Retrofits::class.java.simpleName
-    private var retrofit: Retrofit? = null
+    //    private val retrofit: Retrofit
     private val okHttpClient: OkHttpClient
     private val DEFAULT_TIMEOUT = 5L
-
-    private val baseUrlKy = "http://baobab.kaiyanapp.com/api/v4/"
+    private var retrofitBuilder: Retrofit.Builder? = null
     private val baseUrlCnode = "https://cnodejs.org/api/v1/"
-    private val baseUrlBenefit = "http://gank.io/api/"
-    private var retroftBuilder: Retrofit.Builder
+    private val baseUrlGankIo = "http://gank.io/api/"
 
     init {
+
+        val baseUrlKy = "http://baobab.kaiyanapp.com/api/v4/"
+
         val logging = Interceptor { chain ->
             val request = chain.request()
             Debuger.logD(TAG, "okhttp --- > " + request.url())
@@ -49,17 +50,18 @@ object Retrofits {
 //                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 //                .baseUrl(baseUrlCnode)
 //                .build()
-        retroftBuilder = Retrofit.Builder()
+
+        retrofitBuilder = Retrofit.Builder()
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
     }
 
     val cnodeService: CnodeService by lazy {
-        retroftBuilder.baseUrl(baseUrlCnode).build().create(CnodeService::class.java)
+        retrofitBuilder!!.baseUrl(baseUrlCnode).build().create(CnodeService::class.java)
     }
 
-    val benefitService: BenefitService by lazy {
-        retroftBuilder.baseUrl(baseUrlBenefit).build().create(BenefitService::class.java)
+    val gankIoService: GankIoService by lazy {
+        retrofitBuilder!!.baseUrl(baseUrlGankIo).build().create(GankIoService::class.java)
     }
 }

@@ -10,6 +10,8 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import com.ledboot.toffee.adapter.LaucherPageAdapter
 import com.ledboot.toffee.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_launcher.*
 import kotlinx.android.synthetic.main.content_launcher.*
@@ -19,6 +21,8 @@ class LauncherActivity : BaseActivity() {
     val TAG: String = LauncherActivity::class.java.simpleName
     private var toolbar: Toolbar? = null
     private var drawer: DrawerLayout? = null
+
+    val laucherAdapter by lazy { LaucherPageAdapter(this, supportFragmentManager, MainData.fragmentList) }
 
     object MainData {
         val fragmentList = arrayOf(HomeFrament(), GirlFrament(), UserFrament())
@@ -41,11 +45,12 @@ class LauncherActivity : BaseActivity() {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer?.apply { addDrawerListener(toggle) }
         toggle.syncState()
-
+        view_page.adapter = laucherAdapter
+        view_page.offscreenPageLimit = 3
+        view_page.setCurrentItem(0)
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        Log.d("mOnNavigatior", "oder id->" + item.order)
         val transaction = supportFragmentManager.beginTransaction()
         when (item.itemId) {
             R.id.navigation_home -> {
@@ -93,7 +98,6 @@ class LauncherActivity : BaseActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.launcher, menu)
         return true
     }

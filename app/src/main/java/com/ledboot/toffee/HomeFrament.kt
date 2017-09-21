@@ -10,6 +10,7 @@ import com.ledboot.toffee.adapter.HomeListAdapter
 import com.ledboot.toffee.base.BaseFrament
 import com.ledboot.toffee.model.Topics
 import com.ledboot.toffee.network.Retrofits
+import com.ledboot.toffee.utils.Debuger
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fra_home.view.*
@@ -26,6 +27,11 @@ class HomeFrament : BaseFrament() {
 
     val adapter by lazy { HomeListAdapter(context) }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Debuger.logD("onCreate")
+    }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val view = inflater!!.inflate(R.layout.fra_home, container, false)
@@ -35,10 +41,6 @@ class HomeFrament : BaseFrament() {
 
     private fun initView(view: View) {
         dataList = ArrayList()
-        for (i in 0..30) {
-            (dataList as ArrayList).add(Topics.Data(i.toString(), "", "", "", "", "", true, true, i, i, "", Topics.Data.Author("", "")))
-        }
-        (dataList as ArrayList)
         view.home_recycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         view.home_recycler.adapter = adapter
         initData()
