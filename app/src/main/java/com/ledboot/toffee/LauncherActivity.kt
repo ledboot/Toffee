@@ -7,10 +7,8 @@ import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.ledboot.toffee.adapter.LaucherPageAdapter
 import com.ledboot.toffee.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_launcher.*
@@ -45,13 +43,13 @@ class LauncherActivity : BaseActivity() {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer?.apply { addDrawerListener(toggle) }
         toggle.syncState()
+        navigation.setupWithViewPager(view_page, true)
         view_page.adapter = laucherAdapter
         view_page.offscreenPageLimit = 3
         view_page.setCurrentItem(0)
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        val transaction = supportFragmentManager.beginTransaction()
         when (item.itemId) {
             R.id.navigation_home -> {
                 return@OnNavigationItemSelectedListener true
