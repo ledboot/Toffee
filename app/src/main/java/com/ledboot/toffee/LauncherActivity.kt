@@ -3,6 +3,7 @@ package com.ledboot.toffee
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.NavigationView
+import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -23,7 +24,7 @@ class LauncherActivity : BaseActivity() {
     val laucherAdapter by lazy { LaucherPageAdapter(this, supportFragmentManager, MainData.fragmentList) }
 
     object MainData {
-        val fragmentList = arrayOf(HomeFrament(), GirlFrament(), UserFrament())
+        val fragmentList: Array<Fragment> = arrayOf(HomeFrament(), GirlFrament(), UserFrament())
     }
 
 
@@ -35,15 +36,16 @@ class LauncherActivity : BaseActivity() {
 
     private fun initView() {
         toolbar = findViewById(R.id.toolbar) as Toolbar
-        navigation.apply { setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener) }
-        nav_view.apply { setNavigationItemSelectedListener(mSideNavigationItemSeletedListener) }
+        nav_view.setNavigationItemSelectedListener(mSideNavigationItemSeletedListener)
         setSupportActionBar(toolbar)
         drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         val toggle = ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer?.apply { addDrawerListener(toggle) }
+        drawer?.addDrawerListener(toggle)
         toggle.syncState()
         navigation.setupWithViewPager(view_page, true)
+        navigation.enableShiftMode(false)
+        navigation.enableItemShiftMode(false)
         view_page.adapter = laucherAdapter
         view_page.offscreenPageLimit = 3
         view_page.setCurrentItem(0)

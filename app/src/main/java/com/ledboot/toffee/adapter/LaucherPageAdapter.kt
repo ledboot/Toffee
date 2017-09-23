@@ -5,28 +5,25 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.view.View
+import android.view.ViewGroup
 import com.ledboot.toffee.base.BaseFrament
 
 /**
  * Created by Gwynn on 2017/9/20.
  */
-class LaucherPageAdapter(context: Context?, fragmentManager: FragmentManager, framentList: Array<BaseFrament>) : FragmentPagerAdapter(fragmentManager) {
+class LaucherPageAdapter(context: Context?, fragmentManager: FragmentManager, framentList: Array<Fragment>) : FragmentPagerAdapter(fragmentManager) {
 
-    override fun getItem(position: Int): Fragment {
-        return framentList!!.get(position)
-    }
 
     var context: Context? = null
-    var framentList: Array<BaseFrament>? = null
+    var framentList: Array<Fragment>? = null
 
     init {
         this.context = context
         this.framentList = framentList
     }
 
-
-    override fun isViewFromObject(view: View?, `object`: Any?): Boolean {
-        return false
+    override fun getItem(position: Int): Fragment? {
+        return framentList!!.get(position)
     }
 
     override fun getCount() = framentList!!.size

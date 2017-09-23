@@ -14,15 +14,16 @@ import java.lang.reflect.Field
 /**
  * Created by Gwynn on 17/9/21.
  */
-open class BottomNavigationViewEx : BottomNavigationView, BottomNavigationView.OnNavigationItemSelectedListener {
+open class BottomNavigationViewEx : BottomNavigationView {
 
 
     var mViewPager: ViewPager? = null
     var mMenuView: BottomNavigationMenuView? = null
     var mButtons: Array<BottomNavigationItemView>? = null
     var mOnPageChangeListener: ExOnPageChangeListener? = null
-    var mOnNavigationItemSelectedListener: BottomNavigationView.OnNavigationItemSelectedListener? = null
-    var mPrevioutsPosition: Int = -1
+    var mOnNavigationItemSelectedListener: ExOnNavigationItemSelectedListener? = null
+    var mOtherOnNavigationItemSelectedListener: OnNavigationItemSelectedListener? = null
+
     var mSmoothScroll: Boolean = false
     var mItemArray: SparseArray<Int>? = null
 
@@ -30,7 +31,10 @@ open class BottomNavigationViewEx : BottomNavigationView, BottomNavigationView.O
 
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+        getBottomNavigationMenuView()
+        getBottomNavigationItemViews()
+    }
 
     fun setupWithViewPager(viewPage: ViewPager) {
         setupWithViewPager(viewPage, false)
@@ -59,6 +63,36 @@ open class BottomNavigationViewEx : BottomNavigationView, BottomNavigationView.O
 
         mViewPager!!.addOnPageChangeListener(mOnPageChangeListener)
 
+        mOnNavigationItemSelectedListener = ExOnNavigationItemSelectedListener(viewPager, this, mOtherOnNavigationItemSelectedListener, smoothScroll)
+
+        super.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+    }
+
+    fun getOnNavigationItemSelectedListener(): Any? {
+        val field: Field = BottomNavigationViewEx::class.java.superclass.getDeclaredField("mSelectedListener")
+        field.isAccessible = true
+        val listener = field.get(this)
+        return listener
+    }
+
+    fun enableShiftMode(enable: Boolean) {
+        val menuView = getBottomNavigationMenuView()
+        val field: Field = menuView::class.java.getDeclaredField("mShiftingMode")
+        field.isAccessible = true
+        field.setBoolean(menuView, enable)
+        menuView.updateMenuView()
+    }
+
+    fun enableItemShiftMode(enable: Boolean) {
+        val menuView = getBottomNavigationMenuView()
+        var mButtons = getBottomNavigationItemViews()
+        val field: Field = BottomNavigationItemView::class.java.getDeclaredField("mShiftingMode")
+        field.isAccessible = true
+        for (item in mButtons) {
+            field.setBoolean(item, enable)
+        }
+        menuView.updateMenuView()
     }
 
     fun getBottomNavigationMenuView(): BottomNavigationMenuView {
@@ -71,10 +105,13 @@ open class BottomNavigationViewEx : BottomNavigationView, BottomNavigationView.O
     }
 
     fun getBottomNavigationItemViews(): Array<BottomNavigationItemView> {
-        val menuView = getBottomNavigationMenuView()
-        val field: Field = menuView::class.java.getDeclaredField("mButtons")
-        field.isAccessible = true
-        mButtons = field.get(menuView) as Array<BottomNavigationItemView>
+        if (mButtons == null) {
+            val menuView = getBottomNavigationMenuView()
+            val field: Field = menuView::class.java.getDeclaredField("mButtons")
+            field.isAccessible = true
+            mButtons = field.get(menuView) as Array<BottomNavigationItemView>
+        }
+
         return mButtons as Array<BottomNavigationItemView>
     }
 
@@ -103,25 +140,15 @@ open class BottomNavigationViewEx : BottomNavigationView, BottomNavigationView.O
 
 
     override fun setOnNavigationItemSelectedListener(listener: OnNavigationItemSelectedListener?) {
-        if (mOnNavigationItemSelectedListener == null) {
-            mOnNavigationItemSelectedListener = listener
+        if (null == mOnNavigationItemSelectedListener) {
+            mOtherOnNavigationItemSelectedListener = listener
+            return
+        } else {
+            mOnNavigationItemSelectedListener!!.setOnNavigationItemSelectedListener(listener!!)
         }
-        super.setOnNavigationItemSelectedListener(listener)
+
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-
-        if (mPrevioutsPosition == getMenuItemPosition(item))
-            return true
-
-        mOnNavigationItemSelectedListener!!.onNavigationItemSelected(item)
-
-        mViewPager!!.setCurrentItem(item.itemId, mSmoothScroll)
-
-        mPrevioutsPosition = getMenuItemPosition(item)
-
-        return true
-    }
 
     class ExOnPageChangeListener : ViewPager.OnPageChangeListener {
 
@@ -140,6 +167,38 @@ open class BottomNavigationViewEx : BottomNavigationView, BottomNavigationView.O
 
         override fun onPageSelected(position: Int) {
             bottomNavigation!!.setCurrentItem(position)
+        }
+
+    }
+
+    class ExOnNavigationItemSelectedListener(viewPage: ViewPager, navigationView: BottomNavigationViewEx, listener: Any?, smoothScroll: Boolean)
+        : BottomNavigationView.OnNavigationItemSelectedListener {
+
+        var mViewPage: ViewPager = viewPage
+        var mListener: Any? = listener
+        var mSmoothScroll: Boolean = smoothScroll
+        var mPrevioutsPosition: Int = -1
+        var mNavigationView: BottomNavigationViewEx = navigationView
+
+        override fun onNavigationItemSelected(item: MenuItem): Boolean {
+            val position: Int = mNavigationView.getMenuItemPosition(item)
+            if (mPrevioutsPosition == position) {
+                return true
+            }
+            if (null != mListener) {
+                val selected: Boolean = (mListener as OnNavigationItemSelectedListener).onNavigationItemSelected(item)
+                if (!selected)
+                    return false
+            }
+            if (null == mViewPage)
+                return false
+            mViewPage.setCurrentItem(position, mSmoothScroll)
+            mPrevioutsPosition = position
+            return true
+        }
+
+        fun setOnNavigationItemSelectedListener(listener: OnNavigationItemSelectedListener) {
+            this.mListener = listener
         }
 
     }
