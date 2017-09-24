@@ -54,7 +54,6 @@ dependencies {
     compile dependencies.supportAnnotation
     compile dependencies.cardView
     compile dependencies.kotlinReflect
-//    kapt dependencies.glideCompiler
 
 }
 

@@ -140,13 +140,7 @@ open class BottomNavigationViewEx : BottomNavigationView {
 
 
     override fun setOnNavigationItemSelectedListener(listener: OnNavigationItemSelectedListener?) {
-        if (null == mOnNavigationItemSelectedListener) {
-            mOtherOnNavigationItemSelectedListener = listener
-            return
-        } else {
-            mOnNavigationItemSelectedListener!!.setOnNavigationItemSelectedListener(listener!!)
-        }
-
+        mOtherOnNavigationItemSelectedListener = listener
     }
 
 

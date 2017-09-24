@@ -68,8 +68,9 @@ class HomeFrament : BaseFrament() {
     override fun onUserVisible() {
         super.onUserVisible()
     }
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
+
+    override fun onUserInvisible() {
+        super.onUserVisible()
     }
 }
 
