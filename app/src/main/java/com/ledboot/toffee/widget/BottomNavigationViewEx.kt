@@ -184,8 +184,6 @@ open class BottomNavigationViewEx : BottomNavigationView {
                 if (!selected)
                     return false
             }
-            if (null == mViewPage)
-                return false
             mViewPage.setCurrentItem(position, mSmoothScroll)
             mPrevioutsPosition = position
             return true

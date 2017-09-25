@@ -1,60 +1,73 @@
 package com.ledboot.toffee
 
-import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.ledboot.toffee.adapter.GirlAdapter
-import com.ledboot.toffee.base.BaseFrament
+import com.ledboot.toffee.base.ListBaseFrament
 import com.ledboot.toffee.model.Girls
-import com.ledboot.toffee.model.Topics
 import com.ledboot.toffee.network.Retrofits
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fra_girl.view.*
+import kotlinx.android.synthetic.main.fra_list.view.*
 
 /**
  * Created by Eleven on 2017/9/13.
  */
-class GirlFrament : BaseFrament() {
+class GirlFrament : ListBaseFrament() {
+
 
     var dataList: List<Girls.Results>? = null
 
     val adapter by lazy { GirlAdapter(context) }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    var currentPage: Int = 1
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.fra_girl, container, false)
-        initView(view)
-        return view
-    }
-
-    private fun initView(view: View) {
+    private fun initView() {
         dataList = ArrayList()
-        view.girl_recycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        view.girl_recycler.adapter = adapter
+        view!!.refresh_view.setLayoutManager(LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false))
+        view!!.refresh_view.setAdapter(adapter)
         initData()
     }
 
     private fun initData() {
-        Retrofits.gankIoService.getBenefitList(10, 1)
+        Retrofits.gankIoService.getBenefitList(10, currentPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doFinally {
+                    view!!.refresh_view.refreshFinish()
+                }
                 .subscribe({ girls ->
-                    adapter.setData(girls.results)
+                    dataList = ArrayList()
+                    (dataList!! as ArrayList).addAll(girls.results)
+                    adapter.setData(dataList as ArrayList<Girls.Results>)
                 })
     }
 
     override fun onFirstUserVisible() {
-        super.onFirstUserVisible()
+        initView()
     }
 
     override fun onUserVisible() {
         super.onUserVisible()
+    }
+
+    override fun onRefresh() {
+        currentPage = 1
+        initData()
+    }
+
+    override fun onLoadMore() {
+        ++currentPage
+        Retrofits.gankIoService.getBenefitList(10, currentPage)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally {
+                    view!!.refresh_view.onLoadFinish()
+                }
+                .subscribe({ girls ->
+                    (dataList!! as ArrayList).addAll(girls.results)
+                    adapter.setData(dataList as ArrayList<Girls.Results>)
+                })
+
     }
 
 

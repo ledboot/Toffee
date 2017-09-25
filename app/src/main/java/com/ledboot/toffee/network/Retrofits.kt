@@ -28,8 +28,6 @@ object Retrofits {
 
     init {
 
-        val baseUrlKy = "http://baobab.kaiyanapp.com/api/v4/"
-
         val logging = Interceptor { chain ->
             val request = chain.request()
             Debuger.logD(TAG, "okhttp --- > " + request.url())
