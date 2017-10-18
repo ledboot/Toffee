@@ -1,52 +1,46 @@
 package com.ledboot.toffee.adapter;
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
-import android.view.View
-import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.ledboot.toffee.R
 import com.ledboot.toffee.model.Topics
+import com.ledboot.toffee.widget.BaseQuickAdapter
+import com.ledboot.toffee.widget.BaseViewHolder
 import kotlinx.android.synthetic.main.topic_item.view.*
 
-class HomeListAdapter(context: Context) : RecyclerView.Adapter<HomeListAdapter.ViewHolder>() {
+class HomeListAdapter : BaseQuickAdapter<Topics.Data, BaseViewHolder> {
 
-    var context: Context? = null
+    var mContext: Context? = null
 
-    init {
-        this.context = context
+    constructor(context: Context) : super(R.layout.topic_item, null) {
+        mContext = context
     }
 
-    val dataList by lazy { ArrayList<Topics.Data>() }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var data: Topics.Data = dataList.get(position)
+    override fun convert(holder: BaseViewHolder, item: Topics.Data?) {
 
-        holder.itemView.tv_reply_count.text = data.replyCount.toString()
-        holder.itemView.tv_visit_count.text = data.visitCount.toString()
-        holder.itemView.tv_title.text = data.title
-        when (data.tab) {
-            null -> holder.itemView.tv_tab.text = ""
-            "shared" -> holder.itemView.tv_tab.text = "分享"
-            "ask" -> holder.itemView.tv_tab.text = "问答"
-            else -> holder.itemView.tv_tab.text = "其他"
+        holder.itemView.tv_reply_count.text = item!!.replyCount.toString()
+        holder.itemView.tv_visit_count.text = item!!.visitCount.toString()
+        holder.itemView.tv_title.text = item!!.title
+        if (item!!.tab == null || "null".equals(item!!.tab)) {
+            holder.itemView.tv_tab.text = ""
         }
-        holder.itemView.tv_topic_abstract.text = data.content
-        Glide.with(context).load(data.author.avatarUrl).centerCrop().into(holder.itemView.img_author_avator)
-        holder.itemView.tv_author_name.text = data.author.loginName
-        holder.itemView.tv_create_at.text = data.createAt
+        if (null != item!!.tab) {
+            when (item!!.tab) {
+                "shared" -> holder.itemView.tv_tab.text = "分享"
+                "ask" -> holder.itemView.tv_tab.text = "问答"
+                else -> holder.itemView.tv_tab.text = "其他"
+            }
+        } else {
+            holder.itemView.tv_tab.text = ""
+        }
+
+        holder.itemView.tv_topic_abstract.text = item!!.content
+        Glide.with(mContext).load(item!!.author.avatarUrl).centerCrop().into(holder.itemView.img_author_avator)
+        holder.itemView.tv_author_name.text = item!!.author.loginName
+        holder.itemView.tv_create_at.text = item!!.createAt
     }
 
-    override fun getItemCount() = dataList.size
-
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int) = ViewHolder(View.inflate(parent?.context, R.layout.topic_item, null))
-
-    class ViewHolder(rootView: View) : RecyclerView.ViewHolder(rootView)
-
-    fun setData(data: List<Topics.Data>) {
-        dataList.addAll(data)
-        notifyDataSetChanged()
-    }
 }
 
 

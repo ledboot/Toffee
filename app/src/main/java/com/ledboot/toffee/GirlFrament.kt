@@ -5,6 +5,7 @@ import com.ledboot.toffee.adapter.GirlAdapter
 import com.ledboot.toffee.base.ListBaseFrament
 import com.ledboot.toffee.model.Girls
 import com.ledboot.toffee.network.Retrofits
+import com.ledboot.toffee.utils.Debuger
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fra_list.view.*
@@ -15,31 +16,16 @@ import kotlinx.android.synthetic.main.fra_list.view.*
 class GirlFrament : ListBaseFrament() {
 
 
-    var dataList: List<Girls.Results>? = null
+    var dataList: List<Girls.Results> = ArrayList()
 
     val adapter by lazy { GirlAdapter(context) }
 
     var currentPage: Int = 1
 
     private fun initView() {
-        dataList = ArrayList()
         view!!.refresh_view.setLayoutManager(LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false))
         view!!.refresh_view.setAdapter(adapter)
-        initData()
-    }
-
-    private fun initData() {
-        Retrofits.gankIoService.getBenefitList(10, currentPage)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doFinally {
-                    view!!.refresh_view.refreshFinish()
-                }
-                .subscribe({ girls ->
-                    dataList = ArrayList()
-                    (dataList!! as ArrayList).addAll(girls.results)
-                    adapter.setData(dataList as ArrayList<Girls.Results>)
-                })
+        requestDataFromRemote(true)
     }
 
     override fun onFirstUserVisible() {
@@ -52,11 +38,27 @@ class GirlFrament : ListBaseFrament() {
 
     override fun onRefresh() {
         currentPage = 1
-        initData()
+        requestDataFromRemote(true)
     }
 
     override fun onLoadMore() {
         ++currentPage
+        Debuger.logD("currentPage=$currentPage")
+        requestDataFromRemote(false)
+    }
+
+    fun loadData(clear: Boolean, data: List<Girls.Results>) {
+        when (clear) {
+            true -> {
+                (dataList as ArrayList).clear()
+                (dataList as ArrayList).addAll(data)
+            }
+            false -> (dataList as ArrayList).addAll(data)
+        }
+        adapter.setData(dataList)
+    }
+
+    fun requestDataFromRemote(clear: Boolean) {
         Retrofits.gankIoService.getBenefitList(10, currentPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -64,10 +66,8 @@ class GirlFrament : ListBaseFrament() {
                     view!!.refresh_view.onLoadFinish()
                 }
                 .subscribe({ girls ->
-                    (dataList!! as ArrayList).addAll(girls.results)
-                    adapter.setData(dataList as ArrayList<Girls.Results>)
+                    loadData(clear, girls.results)
                 })
-
     }
 
 

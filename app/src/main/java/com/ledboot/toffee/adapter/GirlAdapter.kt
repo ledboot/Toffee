@@ -1,17 +1,22 @@
 package com.ledboot.toffee.adapter
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.ledboot.toffee.R
 import com.ledboot.toffee.model.Girls
+import com.ledboot.toffee.widget.BaseQuickAdapter
+import com.ledboot.toffee.widget.BaseViewHolder
+import kotlinx.android.synthetic.main.girl_item.view.*
 
 /**
  * Created by Gwynn on 2017/9/20.
  */
-class GirlAdapter(context: Context?) : RecyclerView.Adapter<GirlAdapter.ViewHolder>() {
+class GirlAdapter(context: Context?) : BaseQuickAdapter<Girls.Results, BaseViewHolder>(R.layout.girl_item) {
+
+
+    override fun convert(holder: BaseViewHolder, item: Girls.Results?) {
+        Glide.with(context).load(dataList[holder.layoutPosition].url).into(holder.itemView.img_girl)
+    }
 
 
     open var context: Context? = null
@@ -22,20 +27,6 @@ class GirlAdapter(context: Context?) : RecyclerView.Adapter<GirlAdapter.ViewHold
 
     val dataList by lazy { ArrayList<Girls.Results>() }
 
-
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        var itemView: ImageView = holder?.itemView as ImageView
-        Glide.with(context).load(dataList[position].url).into(itemView)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        var img = ImageView(context)
-        return ViewHolder(img)
-    }
-
-    override fun getItemCount() = dataList.size
-
-    class ViewHolder(rootView: View) : RecyclerView.ViewHolder(rootView)
 
     fun setData(data: List<Girls.Results>) {
         dataList.addAll(data)

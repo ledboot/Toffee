@@ -13,8 +13,14 @@ data class Topics(var success: Boolean, var data: List<Data>) {
                     var good: Boolean, var top: Boolean, var replyCount: Int,
                     var visitCount: Int, var createAt: String, var author: Author) {
         data class Author(@SerializedName("loginname") var loginName: String, var avatarUrl: String)
-        fun handleContent(){
+
+        fun handleContent() {
             StringUtils.removeBlank(content)
         }
+
+        override fun toString(): String {
+            return "Data(id='$id', authorId='$authorId', tab='$tab', content='$content', title='$title', lastReplyAt='$lastReplyAt', good=$good, top=$top, replyCount=$replyCount, visitCount=$visitCount, createAt='$createAt', author=$author)"
+        }
+
     }
 }

@@ -4,16 +4,16 @@ import android.content.Context
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.Adapter
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import com.ledboot.toffee.utils.Debuger
 import com.ledboot.toffee.utils.SizeUtils
 
 /**
  * Created by Gwynn on 2017/9/24.
  */
-open class RefreshView : FrameLayout, SwipeRefreshLayout.OnRefreshListener {
+open class RefreshView : FrameLayout, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
 
 
     private var mRefreshListener: RefreshListener? = null
@@ -23,12 +23,14 @@ open class RefreshView : FrameLayout, SwipeRefreshLayout.OnRefreshListener {
     var mAutoLoadMore: Boolean = true
     var mAutoRefresh: Boolean = true
     var isOnLoading: Boolean = false
+    var ctx: Context? = null
 
     constructor(context: Context) : this(context, null)
 
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+        ctx = context
         mSwipeRefresh = SwipeRefreshLayout(context)
         mRecyclerView = RecyclerView(context)
         val fraLayoutPamars = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
@@ -40,14 +42,17 @@ open class RefreshView : FrameLayout, SwipeRefreshLayout.OnRefreshListener {
         val verticalPadding = SizeUtils.dp2px(16F)
 
         mRecyclerView.setPadding(0, verticalPadding, 0, verticalPadding)
-
-
         mSwipeRefresh.addView(mRecyclerView)
+
         addView(mSwipeRefresh)
 
         mEndLessScrollListener = EndLessScrollListener(this)
-        mRecyclerView.addOnScrollListener(mEndLessScrollListener)
+//        mRecyclerView.addOnScrollListener(mEndLessScrollListener)
         mSwipeRefresh.setOnRefreshListener(this)
+    }
+
+    override fun onLoadMoreRequest() {
+        mRefreshListener!!.doLoadMore()
     }
 
 
@@ -62,7 +67,8 @@ open class RefreshView : FrameLayout, SwipeRefreshLayout.OnRefreshListener {
         mEndLessScrollListener.setLayoutManager(linearLayoutManager)
     }
 
-    fun setAdapter(adapter: Adapter<*>) {
+    fun setAdapter(adapter: BaseQuickAdapter<*, *>) {
+        adapter.mRequestLoadMoreListener = this
         mRecyclerView.adapter = adapter
     }
 
@@ -86,6 +92,7 @@ open class RefreshView : FrameLayout, SwipeRefreshLayout.OnRefreshListener {
         }
 
         override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+            Debuger.logD("dy==$dy")
             if (dy < 0 || mLinearLayoutManager == null || mRefreshView.isOnLoading) return
 
             val itemCout = mLinearLayoutManager!!.itemCount

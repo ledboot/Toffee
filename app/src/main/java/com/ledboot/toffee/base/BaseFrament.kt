@@ -17,20 +17,38 @@ open class BaseFrament : Fragment() {
     private var isFirstVisible: Boolean = true
     private var isFirstInvisible: Boolean = true
     private var isPrepared: Boolean = false
+    private var isFirstResume = true
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        Debuger.logD(TAG, "onActivityCreated,class =${this.javaClass.simpleName}")
+        super.onActivityCreated(savedInstanceState)
+        initPrepare()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Debuger.logD(TAG,"onCreate")
+        Debuger.logD(TAG, "onCreate, ${this.javaClass.simpleName}")
         super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Debuger.logD(TAG,"onCreateView")
+        Debuger.logD(TAG, "onCreateView, ${this.javaClass.simpleName}")
         return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isFirstResume) {
+            isFirstResume = false
+            return
+        }
+        if (userVisibleHint) {
+            onUserVisible()
+        }
     }
 
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        Debuger.logD(TAG,"setUserVisibleHint")
+        Debuger.logD(TAG, "setUserVisibleHint,isVisibleToUser=${isVisibleToUser}, class =${this.javaClass.simpleName}")
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
             if (isFirstVisible) {
@@ -58,7 +76,7 @@ open class BaseFrament : Fragment() {
     }
 
     open protected fun onFirstUserVisible() {
-        Debuger.logD(TAG, "onFirstUserVisible")
+        Debuger.logD(TAG, "onFirstUserVisible,class =${this.javaClass.simpleName}")
     }
 
     open protected fun onFirstUserInvisible() {
@@ -66,7 +84,7 @@ open class BaseFrament : Fragment() {
     }
 
     open protected fun onUserVisible() {
-        Debuger.logD(TAG, "onUserVisible")
+        Debuger.logD(TAG, "onUserVisible,class =${this.javaClass.simpleName}")
 
     }
 

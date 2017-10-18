@@ -19,7 +19,7 @@ class HomeFrament : ListBaseFrament() {
 
     private var TAG: String = HomeFrament::class.java.simpleName
 
-    var dataList: List<Topics.Data>? = null
+    var dataList: List<Topics.Data> = ArrayList()
 
     val adapter by lazy { HomeListAdapter(context) }
 
@@ -28,32 +28,22 @@ class HomeFrament : ListBaseFrament() {
     var pageSize: Int = 10
 
     private fun initView() {
-        dataList = ArrayList()
         view!!.refresh_view.setLayoutManager(LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false))
         view!!.refresh_view.setAdapter(adapter)
-        initData()
-    }
-
-    private fun initData() {
-        Retrofits.cnodeService.topicsList("topics", currentPage, pageSize, false)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ topics ->
-                    for (data: Topics.Data in topics.data) {
-                        data.handleContent()
-                    }
-                    adapter.setData(topics.data)
-                }, {
-                    it.printStackTrace()
-                    Toast.makeText(context, "error msg = ${it.message}", Toast.LENGTH_SHORT).show()
-                })
+        requestDataFromRemote(true)
     }
 
     override fun onLoadMore() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        ++currentPage
+        requestDataFromRemote(false)
     }
 
     override fun onRefresh() {
+        currentPage = 1
+        requestDataFromRemote(true)
+    }
+
+    fun requestDataFromRemote(clear: Boolean) {
         Retrofits.cnodeService.topicsList("topics", currentPage, pageSize, false)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -64,11 +54,25 @@ class HomeFrament : ListBaseFrament() {
                     for (data: Topics.Data in topics.data) {
                         data.handleContent()
                     }
-                    adapter.setData(topics.data)
+                    loadData(clear, topics.data)
                 }, {
                     it.printStackTrace()
                     Toast.makeText(context, "error msg = ${it.message}", Toast.LENGTH_SHORT).show()
                 })
+    }
+
+    fun loadData(clear: Boolean, data: List<Topics.Data>) {
+        when (clear) {
+            true -> {
+                (dataList as ArrayList).clear()
+                (dataList as ArrayList).addAll(data)
+                adapter.setNewData(dataList)
+            }
+            false -> {
+                (dataList as ArrayList).addAll(data)
+                adapter.addData(dataList)
+            }
+        }
     }
 
     override fun onFirstUserVisible() {
