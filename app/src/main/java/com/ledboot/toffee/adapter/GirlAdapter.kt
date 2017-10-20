@@ -13,23 +13,15 @@ import kotlinx.android.synthetic.main.girl_item.view.*
  */
 class GirlAdapter(context: Context?) : BaseQuickAdapter<Girls.Results, BaseViewHolder>(R.layout.girl_item) {
 
-
-    override fun convert(holder: BaseViewHolder, item: Girls.Results?) {
-        Glide.with(context).load(dataList[holder.layoutPosition].url).into(holder.itemView.img_girl)
-    }
-
-
-    open var context: Context? = null
+    var mContext: Context? = null
 
     init {
-        this.context = context
+        mContext = context
     }
 
-    val dataList by lazy { ArrayList<Girls.Results>() }
+    override fun convert(holder: BaseViewHolder, item: Girls.Results?) {
 
-
-    fun setData(data: List<Girls.Results>) {
-        dataList.addAll(data)
-        notifyDataSetChanged()
+        Glide.with(mContext).load(item!!.url).into(holder.itemView.img_girl)
     }
+
 }

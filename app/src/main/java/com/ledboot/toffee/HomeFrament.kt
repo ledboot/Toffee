@@ -19,8 +19,6 @@ class HomeFrament : ListBaseFrament() {
 
     private var TAG: String = HomeFrament::class.java.simpleName
 
-    var dataList: List<Topics.Data> = ArrayList()
-
     val adapter by lazy { HomeListAdapter(context) }
 
     var currentPage: Int = 1
@@ -47,13 +45,11 @@ class HomeFrament : ListBaseFrament() {
         Retrofits.cnodeService.topicsList("topics", currentPage, pageSize, false)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally {
-                    view!!.refresh_view.refreshFinish()
-                }
                 .subscribe({ topics ->
                     for (data: Topics.Data in topics.data) {
                         data.handleContent()
                     }
+                    adapter.loadMoreComplete()
                     loadData(clear, topics.data)
                 }, {
                     it.printStackTrace()
@@ -64,13 +60,11 @@ class HomeFrament : ListBaseFrament() {
     fun loadData(clear: Boolean, data: List<Topics.Data>) {
         when (clear) {
             true -> {
-                (dataList as ArrayList).clear()
-                (dataList as ArrayList).addAll(data)
-                adapter.setNewData(dataList)
+                view!!.refresh_view.refreshFinish()
+                adapter.setNewData(data)
             }
             false -> {
-                (dataList as ArrayList).addAll(data)
-                adapter.addData(dataList)
+                adapter.addData(data)
             }
         }
     }

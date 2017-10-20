@@ -3,12 +3,14 @@ package com.ledboot.toffee.widget;
 import android.content.Context
 import android.support.annotation.IntRange
 import android.support.annotation.LayoutRes
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.Adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import com.ledboot.toffee.utils.Debuger
 import java.lang.reflect.Constructor
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Modifier
@@ -19,9 +21,10 @@ abstract class BaseQuickAdapter<T, K : BaseViewHolder> : Adapter<K> {
 
     protected var mData: List<T>? = null
     private var mloadMoreView: LoadMoreView = SimpleLoadMoreView()
-    private var mLoadMoreEnable: Boolean = false
+
     private var mPreLoadNumber = 1
-    private var mLoading: Boolean = false
+    private var mDuration = 300
+
 
     var mRequestLoadMoreListener: RequestLoadMoreListener? = null
 
@@ -35,8 +38,18 @@ abstract class BaseQuickAdapter<T, K : BaseViewHolder> : Adapter<K> {
     private val mFooterLayout: LinearLayout? = null
 
     //empty
-    private val mEmptyLayout: FrameLayout? = null
-    private val mIsUseEmpty = true
+    private var mEmptyLayout: FrameLayout? = null
+    private var mIsUseEmpty = true
+
+    //各种状态开关
+    private var mLoadMoreEnable: Boolean = false
+    private var mLoading: Boolean = false
+    private var mNextLoadEnable = false
+    private var mOpenAnimationEnable = false
+
+    var mHeadAndEmptyEnable: Boolean = false
+    var mFootAndEmptyEnable: Boolean = false
+
 
     companion object {
         var HEADER_VIEW: Int = 0x00000111
@@ -49,13 +62,16 @@ abstract class BaseQuickAdapter<T, K : BaseViewHolder> : Adapter<K> {
 
     constructor(@LayoutRes layoutResId: Int, data: List<T>?) {
         mLayoutResId = layoutResId
-        mData = data
+        mData = if (data == null) ArrayList<T>() else data
     }
 
     override fun onBindViewHolder(holder: K, position: Int) {
         autoLoadMore(position)
         var viewType: Int = holder.itemViewType
         when (viewType) {
+            0 -> {
+                convert(holder, getItem(position - getHeaderLayoutCount()))
+            }
             HEADER_VIEW -> {
             }
             LOADING_VIEW -> {
@@ -66,7 +82,8 @@ abstract class BaseQuickAdapter<T, K : BaseViewHolder> : Adapter<K> {
             EMPTY_VIEW -> {
             }
             else -> {
-                convert(holder, getItem(position))
+                Debuger.logD("onBindViewHolder")
+                convert(holder, getItem(position - getHeaderLayoutCount()))
             }
         }
     }
@@ -75,8 +92,14 @@ abstract class BaseQuickAdapter<T, K : BaseViewHolder> : Adapter<K> {
         var count: Int
         if (getEmptyViewCount() == 1) {
             count = 1
+            if (mHeadAndEmptyEnable && getHeaderLayoutCount() != 0) {
+                count++
+            }
+            if (mFootAndEmptyEnable && getFooterLayoutCount() != 0) {
+                count++
+            }
         } else {
-            count = getLoadMoreViewCount()
+            count = getHeaderLayoutCount() + mData!!.size + getFooterLayoutCount() + getLoadMoreViewCount()
         }
         return count
     }
@@ -105,21 +128,42 @@ abstract class BaseQuickAdapter<T, K : BaseViewHolder> : Adapter<K> {
 
     override fun getItemViewType(position: Int): Int {
         if (getEmptyViewCount() == 1) {
+            val header = mHeadAndEmptyEnable && getHeaderLayoutCount() != 0
             when (position) {
-                0 -> return EMPTY_VIEW
-                1 -> return FOOTER_VIEW
-                else -> return super.getItemViewType(position)
+                0 -> return if (header) {
+                    HEADER_VIEW
+                } else {
+                    EMPTY_VIEW
+                }
+                1 -> return if (header) {
+                    EMPTY_VIEW
+                } else {
+                    FOOTER_VIEW
+                }
+                2 -> return FOOTER_VIEW
+                else -> return EMPTY_VIEW
             }
         }
-//        return LOADING_VIEW
-        return super.getItemViewType(position)
-//        val numFooters = getFooterLayoutCount()
-//        var adjPosition: Int = position - mData!!.size
-//        if (adjPosition < numFooters)
-//            return FOOTER_VIEW
-//        else
-//            return LOADING_VIEW
+        val numHeaders = getHeaderLayoutCount()
+        if (position < numHeaders) {
+            return HEADER_VIEW
+        } else {
+            var adjPosition = position - numHeaders
+            val adapterCount = mData!!.size
+            if (adjPosition < adapterCount) {
+                return super.getItemViewType(position)
+            } else {
+                adjPosition = adjPosition - adapterCount
+                val numFooters = getFooterLayoutCount()
+                return if (adjPosition < numFooters) {
+                    FOOTER_VIEW
+                } else {
+                    LOADING_VIEW
+                }
+            }
+        }
     }
+
 
     /**
      * if addHeaderView will be return 1, if not will be return 0
@@ -226,7 +270,7 @@ abstract class BaseQuickAdapter<T, K : BaseViewHolder> : Adapter<K> {
     }
 
     fun getEmptyViewCount(): Int {
-        if (mEmptyLayout == null || mEmptyLayout.getChildCount() === 0) {
+        if (mEmptyLayout == null || mEmptyLayout!!.getChildCount() === 0) {
             return 0
         }
         if (!mIsUseEmpty) {
@@ -244,18 +288,24 @@ abstract class BaseQuickAdapter<T, K : BaseViewHolder> : Adapter<K> {
         if (position < (getItemCount() - mPreLoadNumber)) {
             return
         }
-        if (mloadMoreView!!.getLoadStatus() != LoadMoreView.STATUS_DEFAULT) {
+        if (mloadMoreView!!.mLoadStatus != LoadMoreView.STATUS_DEFAULT) {
             return
         }
-        mloadMoreView.setLoadStatus(LoadMoreView.STATUS_LOADING)
+        mloadMoreView.mLoadStatus = LoadMoreView.STATUS_LOADING
 
         if (!mLoading) {
-            //TODO
+            mLoading = true
+            if (mRequestLoadMoreListener != null) {
+                mRequestLoadMoreListener!!.onLoadMoreRequest()
+            }
         }
     }
 
     fun getLoadMoreViewCount(): Int {
         if (mRequestLoadMoreListener == null || !mLoadMoreEnable) {
+            return 0
+        }
+        if (mloadMoreView.mLoadMoreEndGone) {
             return 0
         }
         if (mData!!.size == 0) {
@@ -281,11 +331,77 @@ abstract class BaseQuickAdapter<T, K : BaseViewHolder> : Adapter<K> {
         if (mRequestLoadMoreListener != null) {
             mLoadMoreEnable = true
             mLoading = false
-            mloadMoreView.setLoadStatus(LoadMoreView.STATUS_DEFAULT)
+            mloadMoreView.mLoadStatus = LoadMoreView.STATUS_DEFAULT
         }
         notifyDataSetChanged()
     }
 
+    fun loadMoreComplete() {
+        if (getLoadMoreViewCount() == 0) return
+        mLoading = false
+        mloadMoreView.mLoadStatus = LoadMoreView.STATUS_DEFAULT
+        notifyItemChanged(getLoadMoreViewPosition())
+    }
+
+    fun loadMoreFail() {
+        if (getLoadMoreViewCount() == 0) return
+        mLoading = false
+        mloadMoreView.mLoadStatus = LoadMoreView.STATUS_FAIL
+        notifyItemChanged(getLoadMoreViewPosition())
+    }
+
+    fun loadMoreEnd(gone: Boolean) {
+        if (getLoadMoreViewCount() == 0) return
+        mLoading = false
+        mloadMoreView.mLoadMoreEndGone = gone
+        if (gone) {
+            notifyItemRemoved(getLoadMoreViewPosition())
+        } else {
+            mloadMoreView.mLoadStatus = LoadMoreView.STATUS_END
+            notifyItemChanged(getLoadMoreViewPosition())
+        }
+    }
+
+    fun getLoadMoreViewPosition(): Int {
+        return getHeaderLayoutCount() + mData!!.size + getFooterLayoutCount()
+    }
+
+    fun setHeaderFooterEmpty(isHeadAndEmpty: Boolean, isFootAndEmpty: Boolean) {
+        mHeadAndEmptyEnable = isHeadAndEmpty
+        mFootAndEmptyEnable = isFootAndEmpty
+    }
+
+    fun setEmptyView(layoutResId: Int, viewGroup: ViewGroup) {
+        val view = LayoutInflater.from(viewGroup.context).inflate(layoutResId, viewGroup, false)
+        setEmptyView(view)
+    }
+
+    fun setEmptyView(emptyView: View) {
+        var insert = false
+        if (mEmptyLayout == null) {
+            mEmptyLayout = FrameLayout(emptyView.context)
+            val layoutParams = RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.MATCH_PARENT)
+            val lp = emptyView.layoutParams
+            if (lp != null) {
+                layoutParams.width = lp.width
+                layoutParams.height = lp.height
+            }
+            mEmptyLayout!!.layoutParams = layoutParams
+            insert = true
+        }
+        mEmptyLayout!!.removeAllViews()
+        mEmptyLayout!!.addView(emptyView)
+        mIsUseEmpty = true
+        if (insert) {
+            if (getEmptyViewCount() == 1) {
+                var position = 0
+                if (mHeadAndEmptyEnable && getHeaderLayoutCount() != 0) {
+                    position++
+                }
+                notifyItemInserted(position)
+            }
+        }
+    }
 
     interface RequestLoadMoreListener {
         fun onLoadMoreRequest()

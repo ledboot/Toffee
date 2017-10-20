@@ -20,10 +20,9 @@ open class RefreshView : FrameLayout, SwipeRefreshLayout.OnRefreshListener, Base
     private var mEndLessScrollListener: EndLessScrollListener
     private var mSwipeRefresh: SwipeRefreshLayout
     private var mRecyclerView: RecyclerView
-    var mAutoLoadMore: Boolean = true
-    var mAutoRefresh: Boolean = true
     var isOnLoading: Boolean = false
     var ctx: Context? = null
+    var mAdapter: BaseQuickAdapter<*, *>? = null
 
     constructor(context: Context) : this(context, null)
 
@@ -41,7 +40,7 @@ open class RefreshView : FrameLayout, SwipeRefreshLayout.OnRefreshListener, Base
 
         val verticalPadding = SizeUtils.dp2px(16F)
 
-        mRecyclerView.setPadding(0, verticalPadding, 0, verticalPadding)
+//        mRecyclerView.setPadding(0, verticalPadding, 0, verticalPadding)
         mSwipeRefresh.addView(mRecyclerView)
 
         addView(mSwipeRefresh)
@@ -63,11 +62,10 @@ open class RefreshView : FrameLayout, SwipeRefreshLayout.OnRefreshListener, Base
 
     fun setLayoutManager(layoutManager: RecyclerView.LayoutManager) {
         mRecyclerView.layoutManager = layoutManager
-        val linearLayoutManager: LinearLayoutManager = layoutManager as LinearLayoutManager
-        mEndLessScrollListener.setLayoutManager(linearLayoutManager)
     }
 
     fun setAdapter(adapter: BaseQuickAdapter<*, *>) {
+        mAdapter = adapter
         adapter.mRequestLoadMoreListener = this
         mRecyclerView.adapter = adapter
     }
@@ -133,6 +131,6 @@ open class RefreshView : FrameLayout, SwipeRefreshLayout.OnRefreshListener, Base
     }
 
     fun onLoadFinish() {
-        isOnLoading = false
+        mAdapter!!.loadMoreComplete()
     }
 }

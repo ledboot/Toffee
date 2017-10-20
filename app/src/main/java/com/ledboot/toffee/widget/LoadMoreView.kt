@@ -7,7 +7,8 @@ import android.support.annotation.LayoutRes
  */
 abstract class LoadMoreView {
 
-    private var mLoadStatus = STATUS_DEFAULT
+    var mLoadStatus = STATUS_DEFAULT
+    var mLoadMoreEndGone = false
 
     companion object {
         val STATUS_DEFAULT: Int = 1
@@ -16,16 +17,7 @@ abstract class LoadMoreView {
         val STATUS_END: Int = 4
     }
 
-    public fun setLoadStatus(status: Int) {
-        mLoadStatus = status
-    }
-
-    public fun getLoadStatus(): Int {
-        return mLoadStatus
-    }
-
-
-    public fun convert(holder: BaseViewHolder) {
+    fun convert(holder: BaseViewHolder) {
         when (mLoadStatus) {
             STATUS_DEFAULT -> {
                 visibleLoading(holder, false)
@@ -63,6 +55,11 @@ abstract class LoadMoreView {
         if (loadingEndViewId != 0) {
             holder.setVisible(loadingEndViewId, visible)
         }
+    }
+
+    fun isLoadEndMoreGone(): Boolean {
+        if (loadingEndViewId == 0) return true
+        return mLoadMoreEndGone
     }
 
     @get:LayoutRes

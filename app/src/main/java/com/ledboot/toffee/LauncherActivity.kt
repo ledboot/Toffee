@@ -10,10 +10,12 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import cn.com.bsfit.dfp.android.FRMS
 import com.ledboot.toffee.adapter.LaucherPageAdapter
 import com.ledboot.toffee.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_launcher.*
 import kotlinx.android.synthetic.main.content_launcher.*
+import kotlinx.android.synthetic.main.nav_header_launcher.*
 
 class LauncherActivity : BaseActivity() {
 
@@ -32,6 +34,12 @@ class LauncherActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_launcher)
         initView()
+        startDFP()
+    }
+
+    private fun startDFP() {
+//        val fingerprint = FRMS.getInstance().get(5000)
+//        textView.text = "指纹：" + fingerprint
     }
 
     private fun initView() {
