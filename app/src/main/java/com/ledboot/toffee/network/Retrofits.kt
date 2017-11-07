@@ -18,13 +18,13 @@ import java.util.concurrent.TimeUnit
  */
 object Retrofits {
 
-    open val TAG: String = Retrofits::class.java.simpleName
-    //    private val retrofit: Retrofit
+    val TAG: String = Retrofits::class.java.simpleName
     private val okHttpClient: OkHttpClient
     private val DEFAULT_TIMEOUT = 5L
     private var retrofitBuilder: Retrofit.Builder? = null
-    private val baseUrlCnode = "https://cnodejs.org/api/v1/"
-    private val baseUrlGankIo = "http://gank.io/api/"
+
+    private const val baseUrlCnode = "https://cnodejs.org/api/v1/"
+    private const val baseUrlGankIo = "http://gank.io/api/"
 
     init {
 
@@ -33,7 +33,7 @@ object Retrofits {
             Debuger.logD(TAG, "okhttp --- > " + request.url())
             chain.proceed(request)
         }
-        val gson: Gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+        val gson: Gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create()
 
@@ -41,13 +41,6 @@ object Retrofits {
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .addInterceptor(logging)
                 .build()
-
-//        retrofit = Retrofit.Builder()
-//                .client(okHttpClient)
-//                .addConverterFactory(GsonConverterFactory.create(gson))
-//                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-//                .baseUrl(baseUrlCnode)
-//                .build()
 
         retrofitBuilder = Retrofit.Builder()
                 .client(okHttpClient)

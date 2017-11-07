@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <title>邦盛前端设置指纹测试</title>
+    <style type="text/css">
+    table{
+      width: 98%;
+    }
+    td{
+      word-break: break-all;
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+    }
+    </style>
+</head>
+<body>
+<div id="ua">
+  
+  <h3>使用方法</h3>
+<p>设备指纹browser端所获取的设备指纹唯一识别码，存储于浏览器端的Cookie中。因此，后台业务系统获取设备指纹时，需要从前端HTTP请求中获取前端存于Cookie中的设备指纹唯一码。</p>
+<h5>
+接口存储的cookie值如下：
+</h5>
+<p>
+  <table id="cookieTable">
+    <tr>
+      <td width="20%">key</td>
+      <td width="40%">value</td>
+      <td width="40%">描述</td>
+    </tr>  
+    <tr>
+      <td>BSFIT_OkLJUJ</td>
+      <td data-td="1" id="BSFIT_OkLJUJ"></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>fp_ver</td>
+      <td data-td="1" id="fp_ver"></td>
+      <td>版本号</td>
+    </tr>
+    <tr>
+      <td>BSFIT_EXPIRATION</td>
+      <td data-td="1" id="BSFIT_EXPIRATION"></td>
+      <td>设备指纹过期时间</td>
+    </tr>
+    <tr>
+      <td>BSFIT_DEVICEID</td>
+      <td data-td="1" id="BSFIT_DEVICEID"></td>
+      <td>设备指纹外码</td>
+    </tr>  
+  </table>
+</p>
+
+<h3>
+注意事项：
+</h3>
+<ul>
+  <li>Java获取HTTP请求中的Cookie方法，可以通过HttpServletRequest中的getcookies() 方法获取</li>
+  <li>在测试设备指纹时，测试页面的URL不能设置为localhost，不然会造成无法正常使用browser端设备指纹</li>
+  <li>在使用设备指纹时，需要保证浏览器环境的JS和Cookie使用正常，不然会对设备指纹使用和设备指纹精准度造成影响</li>
+  <li>在使用设备指时，需要在使用设备指纹的页面优先加载设备指纹前端JS，能够更有效的提升设备指纹使用的精准度和稳定性</li
+  >
+  <li>设备指纹浏览器的选择，尽量选择支持HTML5规范的浏览器，能够更有效的提升设备指纹使用的精准度</li>
+  <li>使用设备指纹时，需要采集设备指纹的业务页面中，需要部署设备指纹js文件，增加设备指纹的稳定性</li>
+  <li>设备指纹使用中，尽量减少IE8浏览器的使用，IE8浏览器在cookie存储中存在bug，会出现部分cookie丢失的情况。</li>
+  <li>
+    <p>在使用360浏览器时，需要在部署了设备指纹的页面上添加一条配置信息: </p>
+    <textarea style="width:90%;"><meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" /></textarea>
+  </li>
+</ul>
+
+
+
+
+
+
+
+  
+
+</div>
+<script type="application/javascript" src="http://10.14.219.81:9080/public/downloads/frms-fingerprint.js?custID=133&serviceUrl=http://10.14.219.81:9080/public/generate/jsonp"></script>
+<script>
+function getCookie(name)
+{
+  var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+  if(arr=document.cookie.match(reg))
+  return unescape(arr[2]);
+  else
+  return null;
+}
+var allTD = document.getElementsByTagName('td'), idName = null;
+for (var len = allTD.length, i = len - 1; i >= 0; i--) {
+  if(allTD[i].getAttribute('data-td')){
+    idName = allTD[i].getAttribute('id');
+    allTD[i].textContent = getCookie1(idName);
+  }
+};
+
+function getCookie1(c_name){
+  var x, y, ARRcookies = document.cookie.split(";");
+  for (i = 0; i<ARRcookies.length; i++) {
+        x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
+        y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
+        x = x.replace(/^\s+|\s+$/g, "");
+        c_name = c_name.replace(/^\s+|\s+$/g, "");
+        if (x == c_name) {
+            return unescape(y);
+        }
+    }
+
+}
+</script>
+</body>
+</html>

@@ -19,7 +19,7 @@ class HomeFrament : ListBaseFrament() {
 
     private var TAG: String = HomeFrament::class.java.simpleName
 
-    val adapter by lazy { HomeListAdapter(context) }
+    val adapter by lazy { HomeListAdapter() }
 
     var currentPage: Int = 1
 

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ledboot.toffee.R
-import com.ledboot.toffee.widget.RefreshView
+import com.ledboot.toffee.widget.refreshLoadView.RefreshView
 import kotlinx.android.synthetic.main.fra_list.view.*
 
 /**

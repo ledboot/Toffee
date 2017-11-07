@@ -1,59 +1,73 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-//apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
-        applicationId "com.ledboot.cnnode"
+        applicationId "com.ledboot.toffee"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+
+        ndk {
+            abiFilters 'armeabi', 'armeabi-v7a', 'x86', 'arm64-v8a'
+        }
     }
+
+    sourceSets.main{
+        jniLibs.srcDirs = ['src/main/jniLibs']
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    packagingOptions{
+    packagingOptions {
         exclude "META-INF/LICENSE.txt"
         exclude "META-INF/NOTICE.txt"
         exclude "META-INF/rxjava.properties"
     }
+
+    externalNativeBuild{
+        ndkBuild{
+            path "src/main/native/Android.mk"
+        }
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
 
     def dependencies = rootProject.ext.dependencies
 
-    compile dependencies.rxJava
-    compile dependencies.rxKotlin
-    compile dependencies.rxAndroid
-    compile dependencies.gson
-    compile dependencies.retrofit
-    compile dependencies.retrofitGsonConverter
-    compile dependencies.retrofitRxjavaAdapter
-    compile dependencies.okhttp3
-    compile dependencies.design
-    compile dependencies.appcompat_v7
-    compile dependencies.constraint_layout
-    compile dependencies.glide
-    compile dependencies.supportAnnotation
-    compile dependencies.cardView
-    compile dependencies.kotlinReflect
+    implementation dependencies.rxJava
+    implementation dependencies.rxKotlin
+    implementation dependencies.rxAndroid
+    implementation dependencies.gson
+    implementation dependencies.retrofit
+    implementation dependencies.retrofitGsonConverter
+    implementation dependencies.retrofitRxjavaAdapter
+    implementation dependencies.okhttp3
+    implementation dependencies.design
+    implementation dependencies.appcompat_v7
+    implementation dependencies.constraint_layout
+    implementation dependencies.glide
+    implementation dependencies.supportAnnotation
+    implementation dependencies.cardView
+    implementation dependencies.kotlinReflect
 
+}
+repositories {
+    mavenCentral()
 }
 
