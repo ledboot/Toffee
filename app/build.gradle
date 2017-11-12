@@ -18,9 +18,9 @@ android {
         }
     }
 
-    sourceSets.main{
-        jniLibs.srcDirs = ['src/main/jniLibs']
-    }
+//    sourceSets.main{
+//        jniLibs.srcDirs = ['src/main/jniLibs']
+//    }
 
     buildTypes {
         release {
@@ -36,7 +36,7 @@ android {
 
     externalNativeBuild{
         ndkBuild{
-            path "src/main/native/Android.mk"
+            path "src/main/native/jni/Android.mk"
         }
     }
 }
