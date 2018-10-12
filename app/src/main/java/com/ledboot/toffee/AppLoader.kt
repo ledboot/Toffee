@@ -1,15 +1,21 @@
 package com.ledboot.toffee
 
-import android.app.Application
 import android.content.Context
-import com.bumptech.glide.Glide
-import com.bumptech.glide.MemoryCategory
+import com.ledboot.toffee.di.DaggerAppComponent
+import dagger.android.AndroidInjector
+import dagger.android.DaggerApplication
 
 /**
  * Created by Gwynn on 17/8/31.
  */
 
-class AppLoader : Application() {
+class AppLoader : DaggerApplication() {
+
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return DaggerAppComponent.builder().create(this)
+    }
+
 
     init {
         instance = this
@@ -23,6 +29,5 @@ class AppLoader : Application() {
     override fun onCreate() {
         super.onCreate()
         appContext = applicationContext
-        Glide.get(this).setMemoryCategory(MemoryCategory.NORMAL)
     }
 }

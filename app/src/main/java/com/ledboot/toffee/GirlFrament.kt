@@ -1,7 +1,7 @@
 package com.ledboot.toffee
 
-import android.support.v7.widget.GridLayoutManager
 import android.view.View
+import androidx.recyclerview.widget.GridLayoutManager
 import com.ledboot.toffee.adapter.GirlAdapter
 import com.ledboot.toffee.base.ListBaseFrament
 import com.ledboot.toffee.model.Girls

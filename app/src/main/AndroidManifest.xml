@@ -30,9 +30,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data
-            android:name="CUST_ID"
-            android:value="cust130"/>
 
         <meta-data
             android:name="com.ledboot.toffee.config.GlideConfig"
@@ -50,7 +47,6 @@
                        android:resource="@xml/shortcuts" />
         </activity>
 
-        <activity android:name=".FingeprintActivity"/>
         <activity android:name=".ComposeActivity" android:exported="true"/>
         <activity
             android:name=".ShortcutEntryActivity"

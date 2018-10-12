@@ -1,16 +1,16 @@
 package com.ledboot.toffee.widget.refreshLoadView
 
 import android.support.annotation.IdRes
-import android.support.v7.widget.RecyclerView
 import android.util.SparseArray
 import android.view.View
 import android.widget.Adapter
 import android.widget.AdapterView
+import androidx.recyclerview.widget.RecyclerView
 
 /**
  * Created by Gwynn on 17/10/16.
  */
-class BaseViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
+class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 
     private var views: SparseArray<View> = SparseArray()

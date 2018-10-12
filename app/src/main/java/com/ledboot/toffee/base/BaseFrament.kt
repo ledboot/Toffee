@@ -1,17 +1,17 @@
 package com.ledboot.toffee.base
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ledboot.toffee.utils.Debuger
+import dagger.android.support.DaggerFragment
 
 /**
  * Created by Gwynn on 17/8/31.
  */
 
-open class BaseFrament : Fragment() {
+open class BaseFrament : DaggerFragment() {
 
     private var TAG: String = BaseFrament::class.java.simpleName
     private var isFirstVisible: Boolean = true
@@ -30,7 +30,7 @@ open class BaseFrament : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Debuger.logD(TAG, "onCreateView, ${this.javaClass.simpleName}")
         return super.onCreateView(inflater, container, savedInstanceState)
     }

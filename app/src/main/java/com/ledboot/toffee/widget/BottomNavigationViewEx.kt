@@ -1,15 +1,15 @@
 package com.ledboot.toffee.widget
 
 import android.content.Context
-import android.support.design.internal.BottomNavigationItemView
-import android.support.design.internal.BottomNavigationMenuView
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.view.ViewPager
 import android.util.AttributeSet
 import android.util.SparseArray
 import android.view.MenuItem
 import android.view.View
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import java.lang.reflect.Field
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 /**
  * Created by Gwynn on 17/9/21.
@@ -20,12 +20,14 @@ open class BottomNavigationViewEx : BottomNavigationView {
     var mViewPager: ViewPager? = null
     var mMenuView: BottomNavigationMenuView? = null
     var mButtons: Array<BottomNavigationItemView>? = null
-    var mOnPageChangeListener: ExOnPageChangeListener? = null
     var mOnNavigationItemSelectedListener: ExOnNavigationItemSelectedListener? = null
     var mOtherOnNavigationItemSelectedListener: OnNavigationItemSelectedListener? = null
 
     var mSmoothScroll: Boolean = false
     var mItemArray: SparseArray<Int>? = null
+
+    val mOnPageChangeListener: ExOnPageChangeListener = ExOnPageChangeListener(this)
+
 
     constructor(context: Context) : this(context, null)
 
@@ -42,23 +44,12 @@ open class BottomNavigationViewEx : BottomNavigationView {
 
     fun setupWithViewPager(viewPager: ViewPager, smoothScroll: Boolean) {
 
-        if (viewPager != null) {
-            mViewPager = viewPager
-
-        } else {
-            mViewPager = null
-            super.setOnNavigationItemSelectedListener(null)
-            return
-        }
+        mViewPager = viewPager
         this.mSmoothScroll = smoothScroll
         mItemArray = SparseArray()
         val size: Int = menu.size()
         for (i in 0 until size) {
             mItemArray!!.put(menu.getItem(i).itemId, i)
-        }
-
-        if (mOnPageChangeListener == null) {
-            mOnPageChangeListener = ExOnPageChangeListener(this)
         }
 
         mViewPager!!.addOnPageChangeListener(mOnPageChangeListener)

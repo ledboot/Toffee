@@ -6,11 +6,6 @@ import android.support.annotation.IdRes
 import android.support.annotation.IntDef
 import android.support.annotation.IntRange
 import android.support.annotation.LayoutRes
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.Adapter
-import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +14,10 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.ledboot.toffee.widget.refreshLoadView.animation.*
 import java.lang.reflect.Constructor
 import java.lang.reflect.InvocationTargetException
@@ -26,7 +25,7 @@ import java.lang.reflect.Modifier
 import java.lang.reflect.ParameterizedType
 
 
-abstract class BaseQuickAdapter<T, K : BaseViewHolder> : Adapter<K> {
+abstract class BaseQuickAdapter<T, K : BaseViewHolder> : RecyclerView.Adapter<K> {
 
     protected val TAG = BaseQuickAdapter::class.java.simpleName
 
@@ -707,7 +706,7 @@ abstract class BaseQuickAdapter<T, K : BaseViewHolder> : Adapter<K> {
      *
      * @param holder
      */
-    override fun onViewAttachedToWindow(holder: K?) {
+    override fun onViewAttachedToWindow(holder: K) {
         super.onViewAttachedToWindow(holder)
         val type = holder!!.itemViewType
         if (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW) {
@@ -733,7 +732,7 @@ abstract class BaseQuickAdapter<T, K : BaseViewHolder> : Adapter<K> {
         }
     }
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         val manager = recyclerView!!.layoutManager
         if (manager is GridLayoutManager) {

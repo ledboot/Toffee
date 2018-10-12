@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -14,13 +16,22 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         ndk {
-            abiFilters 'armeabi', 'armeabi-v7a', 'x86', 'arm64-v8a'
+            abiFilters 'armeabi-v7a', 'x86', 'arm64-v8a'
         }
     }
 
 //    sourceSets.main{
 //        jniLibs.srcDirs = ['src/main/jniLibs']
 //    }
+
+    dataBinding {
+        enabled false
+    }
+
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
 
     buildTypes {
         release {
@@ -44,30 +55,38 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-
-
     def dependencies = rootProject.ext.dependencies
 
     implementation dependencies.rxJava
-    implementation dependencies.rxKotlin
+//    implementation dependencies.rxKotlin
     implementation dependencies.rxAndroid
     implementation dependencies.gson
     implementation dependencies.retrofit
     implementation dependencies.retrofitGsonConverter
     implementation dependencies.retrofitRxjavaAdapter
     implementation dependencies.okhttp3
-    implementation dependencies.design
-    implementation dependencies.appcompat_v7
-    implementation dependencies.constraint_layout
+    implementation dependencies.constraintLayout
     implementation dependencies.glide
-    implementation dependencies.supportAnnotation
-    implementation dependencies.cardView
-    implementation dependencies.kotlinReflect
+    implementation dependencies.daggerAndroid
+
+//    implementation "com.google.dagger:dagger-android-support:$rootProject.ext.daggerVersion"{
+//        exclude module: 'appcompat-v7'
+//    }
+    implementation (dependencies.daggerSupport){
+        exclude module: 'appcompat-v7'
+    }
+    implementation dependencies.lifecycleViewModel
+    implementation dependencies.lifecycleExtensions
+    implementation dependencies.material
+    implementation dependencies.kotlin
+
+    kapt dependencies.dggerAndroidProcessor
+    kapt dependencies.daggerCompiler
+
 
 }
 repositories {
     mavenCentral()
 }
+
 

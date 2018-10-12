@@ -1,7 +1,7 @@
 package com.ledboot.toffee
 
-import android.support.v7.widget.LinearLayoutManager
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.ledboot.toffee.adapter.HomeListAdapter
 import com.ledboot.toffee.base.ListBaseFrament
 import com.ledboot.toffee.model.Topics
