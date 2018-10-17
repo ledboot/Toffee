@@ -1,6 +1,7 @@
 package com.ledboot.toffee.widget.refreshLoadView
 
-import android.support.annotation.LayoutRes
+import android.annotation.SuppressLint
+import androidx.annotation.LayoutRes
 
 /**
  * Created by Gwynn on 17/10/16.
@@ -43,14 +44,17 @@ abstract class LoadMoreView {
     }
 
 
+    @SuppressLint("ResourceType")
     private fun visibleLoading(holder: BaseViewHolder, visible: Boolean) {
         holder.setVisible(loadingViewId, visible)
     }
 
+    @SuppressLint("ResourceType")
     private fun visibleLoadFail(holder: BaseViewHolder, visible: Boolean) {
         holder.setVisible(loadingFailViewId, visible)
     }
 
+    @SuppressLint("ResourceType")
     private fun visibleLoadEnd(holder: BaseViewHolder, visible: Boolean) {
         if (loadingEndViewId != 0) {
             holder.setVisible(loadingEndViewId, visible)

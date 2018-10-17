@@ -1,9 +1,16 @@
 package com.ledboot.toffee.base
 
-import dagger.android.support.DaggerAppCompatActivity
+import android.os.Bundle
+import com.ledboot.toffee.di.androidx.DaggerAppCompatActivityX
 
 /**
  * Created by Gwynn on 17/8/31.
  */
 
-abstract class BaseActivity : DaggerAppCompatActivity()
+open class BaseActivity : DaggerAppCompatActivityX() {
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+}

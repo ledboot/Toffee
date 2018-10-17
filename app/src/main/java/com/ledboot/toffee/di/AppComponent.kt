@@ -1,16 +1,16 @@
 package com.ledboot.toffee.di
 
 import com.ledboot.toffee.AppLoader
+import com.ledboot.toffee.di.androidx.AndroidxInjectionModule
 import dagger.Component
 import dagger.android.AndroidInjector
-import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 
 @Singleton
 @Component(
         modules = [
-            AndroidSupportInjectionModule::class,
+            AndroidxInjectionModule::class,
             AppModule::class,
             ActivityBindingModule::class
         ]

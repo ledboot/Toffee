@@ -1,10 +1,10 @@
 package com.ledboot.toffee.widget.refreshLoadView
 
-import android.support.annotation.IdRes
 import android.util.SparseArray
 import android.view.View
 import android.widget.Adapter
 import android.widget.AdapterView
+import androidx.annotation.IdRes
 import androidx.recyclerview.widget.RecyclerView
 
 /**

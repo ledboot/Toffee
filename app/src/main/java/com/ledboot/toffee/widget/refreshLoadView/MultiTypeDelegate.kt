@@ -1,7 +1,7 @@
 package com.ledboot.toffee.widget.refreshLoadView
 
-import android.support.annotation.LayoutRes
 import android.util.SparseIntArray
+import androidx.annotation.LayoutRes
 
 abstract class MultiTypeDelegate<T> {
     private var layouts: SparseIntArray? = null

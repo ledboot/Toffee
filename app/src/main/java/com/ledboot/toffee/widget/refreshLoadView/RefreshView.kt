@@ -1,11 +1,11 @@
 package com.ledboot.toffee.widget.refreshLoadView
 
 import android.content.Context
-import android.support.v4.widget.SwipeRefreshLayout
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 /**
  * Created by Gwynn on 2017/9/24.

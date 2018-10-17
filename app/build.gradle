@@ -25,7 +25,7 @@ android {
 //    }
 
     dataBinding {
-        enabled false
+        enabled true
     }
 
     compileOptions {
@@ -69,12 +69,9 @@ dependencies {
     implementation dependencies.glide
     implementation dependencies.daggerAndroid
 
-//    implementation "com.google.dagger:dagger-android-support:$rootProject.ext.daggerVersion"{
+//    implementation (dependencies.daggerSupport){
 //        exclude module: 'appcompat-v7'
 //    }
-    implementation (dependencies.daggerSupport){
-        exclude module: 'appcompat-v7'
-    }
     implementation dependencies.lifecycleViewModel
     implementation dependencies.lifecycleExtensions
     implementation dependencies.material

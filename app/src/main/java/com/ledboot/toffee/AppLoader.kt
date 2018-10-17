@@ -2,17 +2,19 @@ package com.ledboot.toffee
 
 import android.content.Context
 import com.ledboot.toffee.di.DaggerAppComponent
+import com.ledboot.toffee.di.androidx.DaggerApplicationX
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
+
 
 /**
  * Created by Gwynn on 17/8/31.
  */
 
-class AppLoader : DaggerApplication() {
+public class AppLoader : DaggerApplicationX() {
+
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         return DaggerAppComponent.builder().create(this)
     }
 
@@ -28,6 +30,5 @@ class AppLoader : DaggerApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        appContext = applicationContext
     }
 }

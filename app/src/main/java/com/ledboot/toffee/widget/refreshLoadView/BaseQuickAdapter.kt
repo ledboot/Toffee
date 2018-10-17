@@ -2,10 +2,6 @@ package com.ledboot.toffee.widget.refreshLoadView;
 
 import android.animation.Animator
 import android.content.Context
-import android.support.annotation.IdRes
-import android.support.annotation.IntDef
-import android.support.annotation.IntRange
-import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +10,10 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import androidx.annotation.IdRes
+import androidx.annotation.IntDef
+import androidx.annotation.IntRange
+import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -67,7 +67,7 @@ abstract class BaseQuickAdapter<T, K : BaseViewHolder> : RecyclerView.Adapter<K>
     private var mOnItemChildClickListener: OnItemChildClickListener? = null
     private var mOnItemChildLongClickListener: OnItemChildLongClickListener? = null
 
-    @IntDef(ALPHAIN.toLong(), SCALEIN.toLong(), SLIDEIN_BOTTOM.toLong(), SLIDEIN_LEFT.toLong(), SLIDEIN_RIGHT.toLong())
+    @IntDef(ALPHAIN, SCALEIN, SLIDEIN_BOTTOM, SLIDEIN_LEFT, SLIDEIN_RIGHT)
     @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
     annotation class AnimationType
 
