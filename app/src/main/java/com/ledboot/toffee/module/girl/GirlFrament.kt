@@ -1,4 +1,4 @@
-package com.ledboot.toffee
+package com.ledboot.toffee.module.girl
 
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
