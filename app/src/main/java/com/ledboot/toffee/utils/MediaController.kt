@@ -9,7 +9,7 @@ class MediaController private constructor(){
 
     companion object {
         init {
-            System.loadLibrary("toffee")
+//            System.loadLibrary("toffee")
         }
 
         private var mInstance: MediaController? = null

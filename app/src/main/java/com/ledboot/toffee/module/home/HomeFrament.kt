@@ -1,4 +1,4 @@
-package com.ledboot.toffee
+package com.ledboot.toffee.module.home
 
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager

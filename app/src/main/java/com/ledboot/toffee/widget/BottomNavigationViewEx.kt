@@ -8,8 +8,8 @@ import android.view.View
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
-import java.lang.reflect.Field
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.lang.reflect.Field
 
 /**
  * Created by Gwynn on 17/9/21.
@@ -61,7 +61,7 @@ open class BottomNavigationViewEx : BottomNavigationView {
     }
 
     fun getOnNavigationItemSelectedListener(): Any? {
-        val field: Field = BottomNavigationViewEx::class.java.superclass.getDeclaredField("mSelectedListener")
+        val field: Field = BottomNavigationViewEx::class.java.superclass.getDeclaredField("selectedListener")
         field.isAccessible = true
         val listener = field.get(this)
         return listener
@@ -88,7 +88,7 @@ open class BottomNavigationViewEx : BottomNavigationView {
 
     fun getBottomNavigationMenuView(): BottomNavigationMenuView {
         if (mMenuView == null) {
-            val field: Field = BottomNavigationViewEx::class.java.superclass.getDeclaredField("mMenuView")
+            val field: Field = BottomNavigationViewEx::class.java.superclass.getDeclaredField("menuView")
             field.isAccessible = true
             mMenuView = field.get(this) as BottomNavigationMenuView
         }
@@ -98,7 +98,7 @@ open class BottomNavigationViewEx : BottomNavigationView {
     fun getBottomNavigationItemViews(): Array<BottomNavigationItemView> {
         if (mButtons == null) {
             val menuView = getBottomNavigationMenuView()
-            val field: Field = menuView::class.java.getDeclaredField("mButtons")
+            val field: Field = menuView::class.java.getDeclaredField("buttons")
             field.isAccessible = true
             mButtons = field.get(menuView) as Array<BottomNavigationItemView>
         }
@@ -112,7 +112,7 @@ open class BottomNavigationViewEx : BottomNavigationView {
         }
         val menuView = getBottomNavigationMenuView()
         val buttons = getBottomNavigationItemViews()
-        val field: Field = menuView::class.java.getDeclaredField("mOnClickListener")
+        val field: Field = menuView::class.java.getDeclaredField("onClickListener")
         field.isAccessible = true
         val onClickListener: View.OnClickListener = field.get(menuView) as View.OnClickListener
         onClickListener.onClick(buttons[item])

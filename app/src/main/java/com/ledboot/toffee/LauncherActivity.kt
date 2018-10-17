@@ -14,8 +14,9 @@ import androidx.fragment.app.Fragment
 import com.ledboot.toffee.adapter.LaucherPageAdapter
 import com.ledboot.toffee.base.BaseActivity
 import com.ledboot.toffee.databinding.ActivityLauncherBinding
-import com.ledboot.toffee.utils.Debuger
-import com.ledboot.toffee.utils.MediaController
+import com.ledboot.toffee.module.girl.GirlFrament
+import com.ledboot.toffee.module.home.HomeFrament
+import com.ledboot.toffee.module.user.UserFrament
 import java.util.*
 
 class LauncherActivity : BaseActivity() {
@@ -38,14 +39,14 @@ class LauncherActivity : BaseActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             createDynamicShortcuts()
         }
-        val value = MediaController.instance.startRecord("/mnt/sdcard/1.ppu")
-        Debuger.logD("Launcher", "value = $value")
+//        val value = MediaController.instance.startRecord("/mnt/sdcard/1.ppu")
+//        Debuger.logD("Launcher", "value = $value")
     }
 
     private fun initView() {
         binding.navigation.setupWithViewPager(binding.viewpager, true)
-        binding.navigation.enableShiftMode(false)
-        binding.navigation.enableItemShiftMode(false)
+//        binding.navigation.enableShiftMode(false)
+//        binding.navigation.enableItemShiftMode(false)
         binding.viewpager.adapter = laucherAdapter
         binding.viewpager.offscreenPageLimit = 3
         binding.viewpager.setCurrentItem(0)

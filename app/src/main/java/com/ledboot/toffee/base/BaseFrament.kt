@@ -1,6 +1,5 @@
 package com.ledboot.toffee.base
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,7 @@ import com.ledboot.toffee.utils.Debuger
  * Created by Gwynn on 17/8/31.
  */
 
-open class BaseFrament : DaggerAndroidxFragment() {
+abstract class BaseFrament : DaggerAndroidxFragment() {
 
     private var TAG: String = BaseFrament::class.java.simpleName
     private var isFirstVisible: Boolean = true
@@ -24,10 +23,6 @@ open class BaseFrament : DaggerAndroidxFragment() {
         Debuger.logD(TAG, "onActivityCreated,class =${this.javaClass.simpleName}")
         super.onActivityCreated(savedInstanceState)
         initPrepare()
-    }
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
