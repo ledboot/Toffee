@@ -3,7 +3,7 @@ package com.ledboot.toffee.module.home
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ledboot.toffee.adapter.HomeListAdapter
-import com.ledboot.toffee.base.ListBaseFrament
+import com.ledboot.toffee.base.ListBaseFragment
 import com.ledboot.toffee.model.Topics
 import com.ledboot.toffee.network.Retrofits
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -14,10 +14,10 @@ import kotlinx.android.synthetic.main.fra_list.view.*
  * Created by Gwynn on 17/8/31.
  */
 
-class HomeFrament : ListBaseFrament() {
+class HomeFragment : ListBaseFragment() {
 
 
-    private var TAG: String = HomeFrament::class.java.simpleName
+    private var TAG: String = HomeFragment::class.java.simpleName
 
     val adapter by lazy { HomeListAdapter() }
 

@@ -4,10 +4,11 @@ import androidx.fragment.app.Fragment
 import dagger.Module
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
+import dagger.internal.Beta
 import dagger.multibindings.Multibinds
 
-
-@Module(includes = arrayOf(AndroidInjectionModule::class))
+@Beta
+@Module(includes = [AndroidInjectionModule::class])
 abstract class AndroidxInjectionModule private constructor() {
 
     @Multibinds

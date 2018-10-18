@@ -16,5 +16,5 @@ abstract class ActivityBindingModule {
                 LauncherModule::class
             ]
     )
-    internal abstract fun launcherActivity(): LauncherActivity
+    abstract fun launcherActivity(): LauncherActivity
 }

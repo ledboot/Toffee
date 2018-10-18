@@ -2,7 +2,9 @@ package com.ledboot.toffee.di.androidx
 
 import androidx.fragment.app.Fragment
 import dagger.android.AndroidInjector
+import dagger.internal.Beta
 
+@Beta
 class AndroidxInjection private constructor() {
 
     val TAG: String = "com.ledboot.toffee.di"
@@ -30,5 +32,4 @@ class AndroidxInjection private constructor() {
             throw IllegalArgumentException(String.format("No injector was found for %s", fragment::class.java.canonicalName))
         }
     }
-
 }

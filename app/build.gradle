@@ -26,6 +26,7 @@ android {
 
     dataBinding {
         enabled true
+//        enabled false
     }
 
     compileOptions {
@@ -45,11 +46,11 @@ android {
         exclude "META-INF/rxjava.properties"
     }
 
-    externalNativeBuild{
-        ndkBuild{
-            path "src/main/native/jni/Android.mk"
-        }
-    }
+//    externalNativeBuild{
+//        ndkBuild{
+//            path "src/main/native/jni/Android.mk"
+//        }
+//    }
 }
 
 dependencies {
@@ -67,16 +68,15 @@ dependencies {
     implementation dependencies.okhttp3
     implementation dependencies.constraintLayout
     implementation dependencies.glide
-    implementation dependencies.daggerAndroid
 
-//    implementation (dependencies.daggerSupport){
-//        exclude module: 'appcompat-v7'
-//    }
+
     implementation dependencies.lifecycleViewModel
     implementation dependencies.lifecycleExtensions
     implementation dependencies.material
     implementation dependencies.kotlin
 
+    implementation dependencies.daggerAndroid
+    implementation dependencies.daggerSupport
     kapt dependencies.dggerAndroidProcessor
     kapt dependencies.daggerCompiler
 

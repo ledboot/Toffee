@@ -1,7 +1,7 @@
 package com.ledboot.toffee.di
 
-import android.app.Application
 import android.content.Context
+import com.ledboot.toffee.AppLoader
 import dagger.Module
 import dagger.Provides
 
@@ -9,7 +9,7 @@ import dagger.Provides
 class AppModule {
 
     @Provides
-    fun provideContext(application: Application): Context {
+    fun provideContext(application: AppLoader): Context {
         return application.applicationContext
     }
 }

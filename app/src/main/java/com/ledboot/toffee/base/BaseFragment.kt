@@ -11,9 +11,9 @@ import com.ledboot.toffee.utils.Debuger
  * Created by Gwynn on 17/8/31.
  */
 
-abstract class BaseFrament : DaggerAndroidxFragment() {
+abstract class BaseFragment : DaggerAndroidxFragment() {
 
-    private var TAG: String = BaseFrament::class.java.simpleName
+    private var TAG: String = BaseFragment::class.java.simpleName
     private var isFirstVisible: Boolean = true
     private var isFirstInvisible: Boolean = true
     private var isPrepared: Boolean = false

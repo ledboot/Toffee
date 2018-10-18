@@ -6,7 +6,7 @@ import dagger.android.DaggerApplication
 import dagger.android.DispatchingAndroidInjector
 import javax.inject.Inject
 
-abstract class DaggerApplicationX : DaggerApplication(), HasAndroidxFragmentInjector {
+abstract class DaggerApplicationX : dagger.android.DaggerApplication(), HasAndroidxFragmentInjector {
 
     @Inject
     @JvmField

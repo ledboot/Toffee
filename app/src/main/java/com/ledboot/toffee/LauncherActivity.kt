@@ -13,10 +13,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.ledboot.toffee.adapter.LaucherPageAdapter
 import com.ledboot.toffee.base.BaseActivity
+import com.ledboot.toffee.base.BaseFragment
 import com.ledboot.toffee.databinding.ActivityLauncherBinding
-import com.ledboot.toffee.module.girl.GirlFrament
-import com.ledboot.toffee.module.home.HomeFrament
-import com.ledboot.toffee.module.user.UserFrament
+import com.ledboot.toffee.module.girl.GirlFragment
+import com.ledboot.toffee.module.home.HomeFragment
+import com.ledboot.toffee.module.user.UserFragment
+import com.ledboot.toffee.utils.consume
 import java.util.*
 
 class LauncherActivity : BaseActivity() {
@@ -28,14 +30,27 @@ class LauncherActivity : BaseActivity() {
     lateinit var binding: ActivityLauncherBinding
 
     object MainData {
-        val fragmentList: Array<Fragment> = arrayOf(HomeFrament(), GirlFrament(), UserFrament())
+        val fragmentList: Array<Fragment> = arrayOf(HomeFragment(), GirlFragment(), UserFragment())
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_launcher)
-        initView()
+        binding.navigation.setOnNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.navigation_home -> consume {}
+                else -> false
+            }
+        }
+        //        binding.navigation.setupWithViewPager(binding.viewpager, true)
+//        binding.navigation.enableShiftMode(false)
+//        binding.navigation.enableItemShiftMode(false)
+//        binding.viewpager.adapter = laucherAdapter
+//        binding.viewpager.offscreenPageLimit = 3
+//        binding.viewpager.setCurrentItem(0)
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             createDynamicShortcuts()
         }
@@ -43,14 +58,7 @@ class LauncherActivity : BaseActivity() {
 //        Debuger.logD("Launcher", "value = $value")
     }
 
-    private fun initView() {
-        binding.navigation.setupWithViewPager(binding.viewpager, true)
-//        binding.navigation.enableShiftMode(false)
-//        binding.navigation.enableItemShiftMode(false)
-        binding.viewpager.adapter = laucherAdapter
-        binding.viewpager.offscreenPageLimit = 3
-        binding.viewpager.setCurrentItem(0)
-
+    private fun <F> replaceFragment(fragment: F) where F : BaseFragment {
     }
 
 

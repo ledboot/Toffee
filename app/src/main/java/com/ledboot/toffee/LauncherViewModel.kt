@@ -1,16 +1,16 @@
 package com.ledboot.toffee
 
 import androidx.lifecycle.ViewModel
-import com.ledboot.toffee.base.BaseFrament
-import com.ledboot.toffee.module.girl.GirlFrament
-import com.ledboot.toffee.module.home.HomeFrament
-import com.ledboot.toffee.module.user.UserFrament
+import com.ledboot.toffee.base.BaseFragment
+import com.ledboot.toffee.module.girl.GirlFragment
+import com.ledboot.toffee.module.home.HomeFragment
+import com.ledboot.toffee.module.user.UserFragment
 import javax.inject.Inject
 
 class LauncherViewModel @Inject constructor() : ViewModel() {
 
-    fun getTabList(): Array<BaseFrament> {
-        val fragmentList: Array<BaseFrament> = arrayOf(HomeFrament(), GirlFrament(), UserFrament())
+    fun getTabList(): Array<BaseFragment> {
+        val fragmentList: Array<BaseFragment> = arrayOf(HomeFragment(), GirlFragment(), UserFragment())
         return fragmentList
 
     }

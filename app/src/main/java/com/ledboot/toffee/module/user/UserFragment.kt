@@ -1,7 +1,7 @@
 package com.ledboot.toffee.module.user
 
 import android.widget.Toast
-import com.ledboot.toffee.base.ListBaseFrament
+import com.ledboot.toffee.base.ListBaseFragment
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fra_list.view.*
@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by Eleven on 2017/9/13.
  */
-class UserFrament : ListBaseFrament() {
+class UserFragment : ListBaseFragment() {
 
 
     override fun onFirstUserVisible() {

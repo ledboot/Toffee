@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.fra_list.view.*
 /**
  * Created by Gwynn on 2017/9/24.
  */
-abstract class ListBaseFrament : BaseFrament(), RefreshView.RefreshListener {
+abstract class ListBaseFragment : BaseFragment(), RefreshView.RefreshListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fra_list, container, false)

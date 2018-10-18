@@ -3,7 +3,7 @@ package com.ledboot.toffee.module.girl
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import com.ledboot.toffee.adapter.GirlAdapter
-import com.ledboot.toffee.base.ListBaseFrament
+import com.ledboot.toffee.base.ListBaseFragment
 import com.ledboot.toffee.model.Girls
 import com.ledboot.toffee.network.Retrofits
 import com.ledboot.toffee.utils.Debuger
@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.fra_list.view.*
 /**
  * Created by Eleven on 2017/9/13.
  */
-class GirlFrament : ListBaseFrament(), BaseQuickAdapter.OnItemClickListener {
+class GirlFragment : ListBaseFragment(), BaseQuickAdapter.OnItemClickListener {
 
 
     override fun onItemClick(adapter: BaseQuickAdapter<*, *>, view: View, position: Int) {

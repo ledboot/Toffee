@@ -1,16 +1,25 @@
 package com.ledboot.toffee
 
-import androidx.lifecycle.ViewModel
-import com.ledboot.toffee.di.ViewModelKey
-import dagger.Binds
+import com.ledboot.toffee.di.FragmentScoped
+import com.ledboot.toffee.module.girl.GirlFragment
+import com.ledboot.toffee.module.home.HomeFragment
+import com.ledboot.toffee.module.user.UserFragment
 import dagger.Module
-import dagger.multibindings.IntoMap
+import dagger.android.ContributesAndroidInjector
 
 @Module
 internal abstract class LauncherModule {
 
-    @Binds
-    @IntoMap
-    @ViewModelKey(LauncherViewModel::class)
-    abstract fun bindLaucherViewModel(viewModel: LauncherViewModel): ViewModel
+
+    @FragmentScoped
+    @ContributesAndroidInjector
+    internal abstract fun contributeHomeFrament(): HomeFragment
+
+    @FragmentScoped
+    @ContributesAndroidInjector
+    internal abstract fun contributeGirlFrament(): GirlFragment
+
+    @FragmentScoped
+    @ContributesAndroidInjector
+    internal abstract fun contributeUserFrament(): UserFragment
 }
