@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit
  */
 class UserFragment : ListBaseFragment() {
 
+    public val TAG: String = UserFragment::class.java.canonicalName
 
     override fun onFirstUserVisible() {
         super.onFirstUserVisible()

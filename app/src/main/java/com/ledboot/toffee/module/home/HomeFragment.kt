@@ -1,11 +1,17 @@
 package com.ledboot.toffee.module.home
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ledboot.toffee.adapter.HomeListAdapter
-import com.ledboot.toffee.base.ListBaseFragment
+import com.ledboot.toffee.base.BaseFragment
 import com.ledboot.toffee.model.Topics
 import com.ledboot.toffee.network.Retrofits
+import com.ledboot.toffee.utils.Debuger
+import com.ledboot.toffee.widget.refreshLoadView.RefreshView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fra_list.view.*
@@ -14,10 +20,10 @@ import kotlinx.android.synthetic.main.fra_list.view.*
  * Created by Gwynn on 17/8/31.
  */
 
-class HomeFragment : ListBaseFragment() {
+class HomeFragment : BaseFragment(), RefreshView.RefreshListener {
 
 
-    private var TAG: String = HomeFragment::class.java.simpleName
+    public val TAG: String = HomeFragment::class.java.canonicalName
 
     val adapter by lazy { HomeListAdapter() }
 
@@ -25,18 +31,28 @@ class HomeFragment : ListBaseFragment() {
 
     var pageSize: Int = 10
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Debuger.logD("HomeFragment onCreate()")
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return super.onCreateView(inflater, container, savedInstanceState)
+        Debuger.logD("HomeFragment onCreateView()")
+    }
+
     private fun initView() {
         view!!.refresh_view.setLayoutManager(LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false))
         view!!.refresh_view.setAdapter(adapter)
         requestDataFromRemote(true)
     }
 
-    override fun onLoadMore() {
+    override fun loadMore() {
         ++currentPage
         requestDataFromRemote(false)
     }
 
-    override fun onRefresh() {
+    override fun refresh() {
         currentPage = 1
         requestDataFromRemote(true)
     }

@@ -11,27 +11,33 @@ import android.os.Build
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import com.ledboot.toffee.adapter.LaucherPageAdapter
 import com.ledboot.toffee.base.BaseActivity
-import com.ledboot.toffee.base.BaseFragment
 import com.ledboot.toffee.databinding.ActivityLauncherBinding
 import com.ledboot.toffee.module.girl.GirlFragment
 import com.ledboot.toffee.module.home.HomeFragment
 import com.ledboot.toffee.module.user.UserFragment
 import com.ledboot.toffee.utils.consume
+import com.ledboot.toffee.utils.inTransaction
 import java.util.*
 
 class LauncherActivity : BaseActivity() {
 
     val TAG: String = LauncherActivity::class.java.simpleName
 
-    val laucherAdapter by lazy { LaucherPageAdapter(supportFragmentManager, MainData.fragmentList) }
+//    val laucherAdapter by lazy { LaucherPageAdapter(supportFragmentManager, MainData.fragmentList) }
 
     lateinit var binding: ActivityLauncherBinding
 
-    object MainData {
-        val fragmentList: Array<Fragment> = arrayOf(HomeFragment(), GirlFragment(), UserFragment())
+
+    companion object {
+        private const val FRAGMENT_ID = R.id.fragment_container
+        private val homeFragment = HomeFragment()
+        private val girlFragment = GirlFragment()
+        private val userFragment = UserFragment()
+
     }
+
+    private lateinit var currentFragment: Fragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,9 +45,17 @@ class LauncherActivity : BaseActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_launcher)
         binding.navigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.navigation_home -> consume {}
+                R.id.navigation_home -> consume { replaceFragment(homeFragment, homeFragment.TAG) }
+                R.id.navigation_dashboard -> consume { replaceFragment(girlFragment, girlFragment.TAG) }
+                R.id.navigation_notifications -> consume { replaceFragment(userFragment, userFragment.TAG) }
                 else -> false
             }
+        }
+
+        binding.navigation.selectedItemId = 0
+        currentFragment = homeFragment
+        supportFragmentManager.inTransaction {
+            show(currentFragment)
         }
         //        binding.navigation.setupWithViewPager(binding.viewpager, true)
 //        binding.navigation.enableShiftMode(false)
@@ -58,7 +72,23 @@ class LauncherActivity : BaseActivity() {
 //        Debuger.logD("Launcher", "value = $value")
     }
 
-    private fun <F> replaceFragment(fragment: F) where F : BaseFragment {
+    private fun <F> replaceFragment(fragment: F, tag: String) where F : Fragment {
+        when (supportFragmentManager.findFragmentByTag(tag)) {
+            null -> {
+                supportFragmentManager.inTransaction {
+                    add(FRAGMENT_ID, fragment, tag)
+                    hide(currentFragment)
+                    show(fragment)
+                }
+            }
+            else -> {
+                supportFragmentManager.inTransaction {
+                    hide(currentFragment)
+                    show(fragment)
+                }
+            }
+        }
+        currentFragment = fragment
     }
 
 

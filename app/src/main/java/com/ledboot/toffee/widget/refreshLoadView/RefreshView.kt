@@ -41,13 +41,13 @@ open class RefreshView : FrameLayout, SwipeRefreshLayout.OnRefreshListener, Base
     }
 
     override fun onLoadMoreRequested() {
-        mRefreshListener!!.doLoadMore()
+        mRefreshListener!!.loadMore()
     }
 
 
     interface RefreshListener {
-        fun doLoadMore()
-        fun doRefresh()
+        fun loadMore()
+        fun refresh()
     }
 
     fun setLayoutManager(layoutManager: RecyclerView.LayoutManager) {
@@ -83,7 +83,7 @@ open class RefreshView : FrameLayout, SwipeRefreshLayout.OnRefreshListener, Base
         if (mRefreshListener != null) {
             mSwipeRefresh.isRefreshing = true
             isRefresh = true
-            mRefreshListener!!.doRefresh()
+            mRefreshListener!!.refresh()
         }
     }
 

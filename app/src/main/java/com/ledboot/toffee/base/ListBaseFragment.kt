@@ -19,11 +19,11 @@ abstract class ListBaseFragment : BaseFragment(), RefreshView.RefreshListener {
         return view
     }
 
-    override fun doLoadMore() {
+    override fun loadMore() {
         onLoadMore()
     }
 
-    override fun doRefresh() {
+    override fun refresh() {
         onRefresh()
     }
 

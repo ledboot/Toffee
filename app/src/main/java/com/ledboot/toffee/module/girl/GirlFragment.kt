@@ -1,6 +1,9 @@
 package com.ledboot.toffee.module.girl
 
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.ledboot.toffee.adapter.GirlAdapter
 import com.ledboot.toffee.base.ListBaseFragment
@@ -17,10 +20,21 @@ import kotlinx.android.synthetic.main.fra_list.view.*
  */
 class GirlFragment : ListBaseFragment(), BaseQuickAdapter.OnItemClickListener {
 
+    public val TAG = GirlFragment::class.java.canonicalName
 
     override fun onItemClick(adapter: BaseQuickAdapter<*, *>, view: View, position: Int) {
         val mode: Girls.Results = adapter.getItem(position) as Girls.Results
         Debuger.logD(mode.toString())
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Debuger.logD("GirlFragment onCreate()")
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        Debuger.logD("GirlFragment onCreateView()")
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
 
