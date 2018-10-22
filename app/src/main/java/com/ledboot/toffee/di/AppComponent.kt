@@ -12,7 +12,8 @@ import javax.inject.Singleton
         modules = [
             AndroidxInjectionModule::class,
             AppModule::class,
-            ActivityBindingModule::class
+            ActivityBindingModule::class,
+            ViewModelModule::class
         ]
 )
 interface AppComponent : AndroidInjector<AppLoader> {

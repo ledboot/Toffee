@@ -28,13 +28,12 @@ class LauncherActivity : BaseActivity() {
 
     lateinit var binding: ActivityLauncherBinding
 
+    val homeFragment = HomeFragment()
+    val girlFragment = GirlFragment()
+    val userFragment = UserFragment()
 
     companion object {
         private const val FRAGMENT_ID = R.id.fragment_container
-        private val homeFragment = HomeFragment()
-        private val girlFragment = GirlFragment()
-        private val userFragment = UserFragment()
-
     }
 
     private lateinit var currentFragment: Fragment
@@ -51,18 +50,9 @@ class LauncherActivity : BaseActivity() {
                 else -> false
             }
         }
-
-        binding.navigation.selectedItemId = 0
         currentFragment = homeFragment
-        supportFragmentManager.inTransaction {
-            show(currentFragment)
-        }
-        //        binding.navigation.setupWithViewPager(binding.viewpager, true)
-//        binding.navigation.enableShiftMode(false)
-//        binding.navigation.enableItemShiftMode(false)
-//        binding.viewpager.adapter = laucherAdapter
-//        binding.viewpager.offscreenPageLimit = 3
-//        binding.viewpager.setCurrentItem(0)
+        binding.navigation.selectedItemId = R.id.navigation_home
+
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
