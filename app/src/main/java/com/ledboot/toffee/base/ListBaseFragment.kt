@@ -15,7 +15,7 @@ abstract class ListBaseFragment : BaseFragment(), RefreshView.RefreshListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fra_list, container, false)
-        view.refresh_view.setRefreshListener(this)
+        view.refresh_view.setOnRefreshListener(this)
         return view
     }
 

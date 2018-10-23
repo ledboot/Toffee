@@ -62,7 +62,7 @@ open class RefreshView : FrameLayout, SwipeRefreshLayout.OnRefreshListener, Base
     }
 
 
-    fun setRefreshListener(listener: RefreshListener) {
+    fun setOnRefreshListener(listener: RefreshListener) {
         this.mRefreshListener = listener
     }
 
