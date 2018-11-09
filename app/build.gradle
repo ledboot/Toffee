@@ -80,7 +80,6 @@ dependencies {
     kapt dependencies.dggerAndroidProcessor
     kapt dependencies.daggerCompiler
 
-
 }
 repositories {
     mavenCentral()

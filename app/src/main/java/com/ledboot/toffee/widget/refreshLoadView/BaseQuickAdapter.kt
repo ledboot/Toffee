@@ -14,6 +14,8 @@ import androidx.annotation.IdRes
 import androidx.annotation.IntDef
 import androidx.annotation.IntRange
 import androidx.annotation.LayoutRes
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,7 +27,7 @@ import java.lang.reflect.Modifier
 import java.lang.reflect.ParameterizedType
 
 
-abstract class BaseQuickAdapter<T, K : BaseViewHolder> : RecyclerView.Adapter<K> {
+abstract class BaseQuickAdapter<T, K : BaseViewHolder<T>> : RecyclerView.Adapter<K> {
 
     protected val TAG = BaseQuickAdapter::class.java.simpleName
 
@@ -812,7 +814,8 @@ abstract class BaseQuickAdapter<T, K : BaseViewHolder> : RecyclerView.Adapter<K>
         autoLoadMore(positions)
         val viewType = holder.itemViewType
         when (viewType) {
-            0 -> convert(holder, mData!![holder.layoutPosition - getHeaderLayoutCount()])
+//            0 -> convert(holder, mData!![holder.layoutPosition - getHeaderLayoutCount()])
+            0 -> holder.bind(mData!![holder.layoutPosition - getHeaderLayoutCount()])
             LOADING_VIEW -> mLoadMoreView.convert(holder)
             HEADER_VIEW -> {
             }
@@ -820,11 +823,14 @@ abstract class BaseQuickAdapter<T, K : BaseViewHolder> : RecyclerView.Adapter<K>
             }
             FOOTER_VIEW -> {
             }
-            else -> convert(holder, mData!![holder.layoutPosition - getHeaderLayoutCount()])
+//            else -> convert(holder, mData!![holder.layoutPosition - getHeaderLayoutCount()])
+            else -> {
+                holder.bind(mData!![holder.layoutPosition - getHeaderLayoutCount()])
+            }
         }
     }
 
-    private fun bindViewClickListener(baseViewHolder: BaseViewHolder?) {
+    private fun bindViewClickListener(baseViewHolder: BaseViewHolder<T>?) {
         if (baseViewHolder == null) {
             return
         }
@@ -852,11 +858,19 @@ abstract class BaseQuickAdapter<T, K : BaseViewHolder> : RecyclerView.Adapter<K>
         if (mMultiTypeDelegate != null) {
             layoutId = mMultiTypeDelegate!!.getLayoutId(viewType)
         }
-        return createBaseViewHolder(parent, layoutId)
+//        return createBaseViewHolder(parent, layoutId)
+        return createViewDataBindingViewHolder(layoutId, parent)
     }
 
     protected fun createBaseViewHolder(parent: ViewGroup, layoutResId: Int): K {
-        return createBaseViewHolder(getItemView(layoutResId, parent))
+        return createViewDataBindingViewHolder(layoutResId, parent)
+//        return createBaseViewHolder(getItemView(layoutResId, parent))
+    }
+
+    protected fun createViewDataBindingViewHolder(@LayoutRes layoutResId: Int, parent: ViewGroup): K {
+        val layoutInflater = LayoutInflater.from(parent.context)
+        var viewDataBinding: ViewDataBinding = DataBindingUtil.inflate(layoutInflater, layoutResId, parent, false)
+        return BaseViewHolder<T>(viewDataBinding) as K
     }
 
     /**
@@ -874,7 +888,7 @@ abstract class BaseQuickAdapter<T, K : BaseViewHolder> : RecyclerView.Adapter<K>
             temp = temp.superclass
         }
         val k = createGenericKInstance(z, view)
-        return k ?: BaseViewHolder(view!!) as K
+        return k ?: BaseViewHolder<T>(view!!) as K
     }
 
     /**
@@ -1394,7 +1408,7 @@ abstract class BaseQuickAdapter<T, K : BaseViewHolder> : RecyclerView.Adapter<K>
      * @param helper A fully initialized helper.
      * @param item   The item that needs to be displayed.
      */
-    protected abstract fun convert(holder: K, item: T)
+//    protected abstract fun convert(holder: K, item: T)
 
     /**
      * get the specific view by position,e.g. getViewByPosition(2, R.id.textView)
@@ -1413,7 +1427,7 @@ abstract class BaseQuickAdapter<T, K : BaseViewHolder> : RecyclerView.Adapter<K>
         if (recyclerView == null) {
             return null
         }
-        val viewHolder = recyclerView.findViewHolderForLayoutPosition(position) as BaseViewHolder
+        val viewHolder = recyclerView.findViewHolderForLayoutPosition(position) as BaseViewHolder<*>
         if (viewHolder == null) return null
         return viewHolder.getView(viewId)
     }

@@ -28,6 +28,8 @@ class HomeFragment : BaseFragment() {
 
     val adapter by lazy { HomeListAdapter() }
 
+    lateinit var mAdapter: HomeAdapter
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -35,6 +37,7 @@ class HomeFragment : BaseFragment() {
     private lateinit var binding: FragmentHomeBinding
 
     private lateinit var refreshView: RefreshView
+//    private lateinit var recyclerView: RecyclerView
 
     private var data: List<Topics.Data>? = null
 
@@ -52,6 +55,8 @@ class HomeFragment : BaseFragment() {
             viewModel = homeViewModel
         }
         refreshView = binding.refreshView
+//        recyclerView = binding.recycler
+        mAdapter = HomeAdapter()
 
         refreshView.apply {
             setLayoutManager(LinearLayoutManager(context))
@@ -61,7 +66,7 @@ class HomeFragment : BaseFragment() {
 
         homeViewModel.data.observe(this, Observer<List<Topics.Data>> {
             it ?: return@Observer
-            adapter.addData(it)
+            adapter.setNewData(it)
         })
 
         return binding.root

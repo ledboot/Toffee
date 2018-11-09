@@ -1,6 +1,5 @@
 package com.ledboot.toffee.module.home
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ledboot.toffee.model.Topics
 import com.ledboot.toffee.service.CnodeService
@@ -15,8 +14,7 @@ open class HomeRepository @Inject constructor(private val cnodeService: CnodeSer
     val pageSize = 10
     val topicsPath = "topics"
 
-    fun getTopics(currentPage: Int): LiveData<List<Topics.Data>> {
-        val data = MutableLiveData<List<Topics.Data>>()
+    fun getTopics(data: MutableLiveData<List<Topics.Data>>, currentPage: Int) {
         cnodeService.topicsList(topicsPath, currentPage, pageSize, false)
                 .subscribeOn((Schedulers.io()))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -28,6 +26,5 @@ open class HomeRepository @Inject constructor(private val cnodeService: CnodeSer
                 }, {
                     it.printStackTrace()
                 })
-        return data
     }
 }

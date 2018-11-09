@@ -18,7 +18,7 @@ abstract class LoadMoreView {
         val STATUS_END: Int = 4
     }
 
-    fun convert(holder: BaseViewHolder) {
+    fun convert(holder: BaseViewHolder<*>) {
         when (loadMoreStatus) {
             STATUS_DEFAULT -> {
                 visibleLoading(holder, false)
@@ -45,17 +45,17 @@ abstract class LoadMoreView {
 
 
     @SuppressLint("ResourceType")
-    private fun visibleLoading(holder: BaseViewHolder, visible: Boolean) {
+    private fun visibleLoading(holder: BaseViewHolder<*>, visible: Boolean) {
         holder.setVisible(loadingViewId, visible)
     }
 
     @SuppressLint("ResourceType")
-    private fun visibleLoadFail(holder: BaseViewHolder, visible: Boolean) {
+    private fun visibleLoadFail(holder: BaseViewHolder<*>, visible: Boolean) {
         holder.setVisible(loadingFailViewId, visible)
     }
 
     @SuppressLint("ResourceType")
-    private fun visibleLoadEnd(holder: BaseViewHolder, visible: Boolean) {
+    private fun visibleLoadEnd(holder: BaseViewHolder<*>, visible: Boolean) {
         if (loadingEndViewId != 0) {
             holder.setVisible(loadingEndViewId, visible)
         }

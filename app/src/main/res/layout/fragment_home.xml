@@ -34,5 +34,11 @@
 
         </com.ledboot.toffee.widget.refreshLoadView.RefreshView>
 
+        <!--<androidx.recyclerview.widget.RecyclerView-->
+        <!--android:id="@+id/recycler"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--app:layoutManager="LinearLayoutManager"/>-->
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

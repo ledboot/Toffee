@@ -1,6 +1,5 @@
 package com.ledboot.toffee.module.home
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ledboot.toffee.model.Topics
@@ -16,19 +15,21 @@ class HomeViewModel @Inject constructor(private val homeRepository: HomeReposito
     }
 
     override fun refresh() {
-        data
+        refreshing.value = true
+        currentPage = 1
+        homeRepository.getTopics(data, currentPage)
     }
 
     val refreshing = MutableLiveData<Boolean>().apply { false }
-    val loading = MutableLiveData<Boolean>().apply { false }
+    var loading = MutableLiveData<Boolean>().apply { false }
 
 
-    val data: LiveData<List<Topics.Data>>
+    val data: MutableLiveData<List<Topics.Data>> = MutableLiveData<List<Topics.Data>>()
 
     var currentPage = 1
 
     init {
-        data = homeRepository.getTopics(currentPage)
+        homeRepository.getTopics(data, currentPage)
     }
 
 }

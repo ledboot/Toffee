@@ -20,3 +20,4 @@ inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> Fragmen
 inline fun <reified VM : ViewModel> Fragment.activityViewModelProvider(
         provider: ViewModelProvider.Factory
 ) = ViewModelProviders.of(requireActivity(), provider).get(VM::class.java)
+
