@@ -12,7 +12,7 @@ ext {
     okhttpLibVersion = "3.4.2"
     constraintLayoutVersion = "1.1.2"
     kotlinVersion = "1.2.60"
-    glideVersion = "3.7.0"
+    glideVersion = "4.8.0"
     rxlifecycleVersion = "2.1.0"
     BaseRecyclerViewAdapterVersion = "2.9.21"
     daggerVersion = "2.16"

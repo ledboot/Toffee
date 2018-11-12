@@ -20,7 +20,7 @@ class BaseViewHolder<T> : RecyclerView.ViewHolder {
 
     constructor(itemView: View) : super(itemView)
 
-    private var binding: ViewDataBinding? = null
+    protected var binding: ViewDataBinding? = null
     private var views: SparseArray<View> = SparseArray()
     var mAdapter: BaseQuickAdapter<*, *>? = null
 
