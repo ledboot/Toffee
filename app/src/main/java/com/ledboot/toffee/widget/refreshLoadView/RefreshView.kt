@@ -38,6 +38,7 @@ open class RefreshView : FrameLayout, SwipeRefreshLayout.OnRefreshListener, Base
         addView(mSwipeRefresh)
 
         mSwipeRefresh.setOnRefreshListener(this)
+
     }
 
     override fun onLoadMoreRequested() {
@@ -57,8 +58,12 @@ open class RefreshView : FrameLayout, SwipeRefreshLayout.OnRefreshListener, Base
     fun setAdapter(adapter: BaseQuickAdapter<*, *>) {
         mAdapter = adapter
         mRecyclerView.adapter = adapter
-        mAdapter!!.setOnLoadMoreListener(this,mRecyclerView)
+        mAdapter!!.setOnLoadMoreListener(this, mRecyclerView)
 
+    }
+
+    fun addItemDecoration(itemDecoration: RecyclerView.ItemDecoration) {
+        mRecyclerView.addItemDecoration(itemDecoration)
     }
 
 

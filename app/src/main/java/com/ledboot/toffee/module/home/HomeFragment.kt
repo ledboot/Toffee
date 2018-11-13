@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ledboot.toffee.adapter.HomeListAdapter
 import com.ledboot.toffee.base.BaseFragment
 import com.ledboot.toffee.databinding.FragmentHomeBinding
 import com.ledboot.toffee.model.Topics
@@ -28,8 +28,6 @@ class HomeFragment : BaseFragment() {
 
     val adapter by lazy { HomeListAdapter() }
 
-    lateinit var mAdapter: HomeAdapter
-
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -37,9 +35,6 @@ class HomeFragment : BaseFragment() {
     private lateinit var binding: FragmentHomeBinding
 
     private lateinit var refreshView: RefreshView
-//    private lateinit var recyclerView: RecyclerView
-
-    private var data: List<Topics.Data>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,19 +50,21 @@ class HomeFragment : BaseFragment() {
             viewModel = homeViewModel
         }
         refreshView = binding.refreshView
-//        recyclerView = binding.recycler
-        mAdapter = HomeAdapter()
-
         refreshView.apply {
             setLayoutManager(LinearLayoutManager(context))
+            addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
             setAdapter(adapter)
             setOnRefreshListener(homeViewModel)
+
         }
+//        refreshView.onLoadFinish()
+//        refreshView.refreshFinish()
 
         homeViewModel.data.observe(this, Observer<List<Topics.Data>> {
             it ?: return@Observer
             adapter.setNewData(it)
         })
+
 
         return binding.root
     }

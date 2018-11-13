@@ -18,13 +18,9 @@ open class HomeRepository @Inject constructor(private val cnodeService: CnodeSer
         cnodeService.topicsList(topicsPath, currentPage, pageSize, false)
                 .subscribeOn((Schedulers.io()))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    for (data: Topics.Data in it.data) {
-                        data.handleContent()
-                    }
-                    data.value = it.data
-                }, {
-                    it.printStackTrace()
-                })
+                .subscribe(
+                        { data.value = it.data },
+                        {},
+                        {})
     }
 }

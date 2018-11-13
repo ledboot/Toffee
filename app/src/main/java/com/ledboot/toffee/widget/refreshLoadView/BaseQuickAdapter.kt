@@ -736,7 +736,7 @@ abstract class BaseQuickAdapter<T, K : BaseViewHolder<T>> : RecyclerView.Adapter
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
-        val manager = recyclerView!!.layoutManager
+        val manager = recyclerView.layoutManager
         if (manager is GridLayoutManager) {
             manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
@@ -881,14 +881,15 @@ abstract class BaseQuickAdapter<T, K : BaseViewHolder<T>> : RecyclerView.Adapter
      * @return new ViewHolder
      */
     protected fun createBaseViewHolder(view: View?): K {
-        var temp: Class<*>? = javaClass
-        var z: Class<*>? = null
-        while (z == null && null != temp) {
-            z = getInstancedGenericKClass(temp)
-            temp = temp.superclass
-        }
-        val k = createGenericKInstance(z, view)
-        return k ?: BaseViewHolder<T>(view!!) as K
+//        var temp: Class<*>? = javaClass
+//        var z: Class<*>? = null
+//        while (z == null && null != temp) {
+//            z = getInstancedGenericKClass(temp)
+//            temp = temp.superclass
+//        }
+//        val k = createGenericKInstance(z, view)
+//        return k ?: BaseViewHolder<T>(view!!) as K
+        return BaseViewHolder<T>(view!!) as K
     }
 
     /**
@@ -935,6 +936,12 @@ abstract class BaseQuickAdapter<T, K : BaseViewHolder<T>> : RecyclerView.Adapter
         if (type is ParameterizedType) {
             val types = type.actualTypeArguments
             for (temp in types) {
+//                if (temp is ParameterizedType){
+//                    val paramType = (temp as ParameterizedType)
+//                    if(paramType.rawType is Class<*> &&  BaseViewHolder::class.java.isAssignableFrom(paramType as Class<*>)){
+//                        return temp
+//                    }
+//                }
                 if (temp is Class<*>) {
                     if (BaseViewHolder::class.java.isAssignableFrom(temp)) {
                         return temp

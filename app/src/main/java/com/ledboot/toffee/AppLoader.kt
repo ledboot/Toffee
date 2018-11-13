@@ -11,7 +11,7 @@ import dagger.android.DaggerApplication
  * Created by Gwynn on 17/8/31.
  */
 
-public class AppLoader : DaggerApplicationX() {
+class AppLoader : DaggerApplicationX() {
 
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {

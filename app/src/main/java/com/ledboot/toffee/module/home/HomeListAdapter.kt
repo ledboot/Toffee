@@ -1,4 +1,4 @@
-package com.ledboot.toffee.adapter;
+package com.ledboot.toffee.module.home;
 
 import com.ledboot.toffee.model.Topics
 import com.ledboot.toffee.widget.refreshLoadView.BaseQuickAdapter
