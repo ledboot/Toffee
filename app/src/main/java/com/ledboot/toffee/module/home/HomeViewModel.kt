@@ -1,9 +1,10 @@
 package com.ledboot.toffee.module.home
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ledboot.toffee.data.RefreshViewState
 import com.ledboot.toffee.model.Topics
-import com.ledboot.toffee.utils.Debuger
 import com.ledboot.toffee.widget.refreshLoadView.RefreshView
 import javax.inject.Inject
 
@@ -11,25 +12,24 @@ class HomeViewModel @Inject constructor(private val homeRepository: HomeReposito
 
 
     override fun loadMore() {
-        Debuger.logD("loadMore")
+        currentPage++
+        homeRepository.getTopics(currentPage)
     }
 
     override fun refresh() {
-        refreshing.value = true
         currentPage = 1
-        homeRepository.getTopics(data, currentPage)
+        homeRepository.getTopics(currentPage)
     }
 
-    val refreshing = MutableLiveData<Boolean>().apply { false }
-    var loading = MutableLiveData<Boolean>().apply { false }
 
+    private val refreshState = MutableLiveData<RefreshViewState>()
 
-    val data: MutableLiveData<List<Topics.Data>> = MutableLiveData<List<Topics.Data>>()
+    val data: LiveData<List<Topics.Data>> = MutableLiveData<List<Topics.Data>>()
 
     var currentPage = 1
 
     init {
-        homeRepository.getTopics(data, currentPage)
+        homeRepository.getTopics(currentPage)
     }
 
 }

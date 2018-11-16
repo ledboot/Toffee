@@ -56,29 +56,32 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
-    def dependencies = rootProject.ext.dependencies
+    def deps = rootProject.ext.dependencies
 
-    implementation dependencies.rxJava
-//    implementation dependencies.rxKotlin
-    implementation dependencies.rxAndroid
-    implementation dependencies.gson
-    implementation dependencies.retrofit
-    implementation dependencies.retrofitGsonConverter
-    implementation dependencies.retrofitRxjavaAdapter
-    implementation dependencies.okhttp3
-    implementation dependencies.constraintLayout
-    implementation dependencies.glide
+    implementation deps.rxJava
+//    implementation deps.rxKotlin
+    implementation deps.rxAndroid
+    implementation deps.gson
+    implementation deps.retrofit
+    implementation deps.retrofitGsonConverter
+    implementation deps.retrofitRxjavaAdapter
+    implementation deps.okhttp3
+    implementation deps.constraintLayout
+    implementation deps.glide
 
 
-    implementation dependencies.lifecycleViewModel
-    implementation dependencies.lifecycleExtensions
-    implementation dependencies.material
-    implementation dependencies.kotlin
+    implementation deps.lifecycleViewModel
+    implementation deps.lifecycleExtensions
+    implementation deps.material
+    implementation deps.kotlin
+    implementation deps.roomRuntime
+    implementation deps.roomCommon
+    kapt deps.roomCompiler
 
-    implementation dependencies.daggerAndroid
-    implementation dependencies.daggerSupport
-    kapt dependencies.dggerAndroidProcessor
-    kapt dependencies.daggerCompiler
+    implementation deps.daggerAndroid
+    implementation deps.daggerSupport
+    kapt deps.dggerAndroidProcessor
+    kapt deps.daggerCompiler
 
 }
 repositories {

@@ -5,10 +5,11 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.ledboot.toffee.AppLoader
+import com.ledboot.toffee.api.CnodeService
+import com.ledboot.toffee.api.GankIoService
 import com.ledboot.toffee.network.Retrofits
-import com.ledboot.toffee.service.CnodeService
-import com.ledboot.toffee.service.GankIoService
 import com.ledboot.toffee.utils.Debuger
+import com.ledboot.toffee.utils.LiveDataCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import okhttp3.Interceptor
@@ -54,6 +55,7 @@ class AppModule {
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addCallAdapterFactory(LiveDataCallAdapterFactory())//添加LiveData adapter
     }
 
     @Provides

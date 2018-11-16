@@ -1,10 +1,9 @@
 package com.ledboot.toffee.module.home
 
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import com.ledboot.toffee.api.ApiResponse
+import com.ledboot.toffee.api.CnodeService
 import com.ledboot.toffee.model.Topics
-import com.ledboot.toffee.service.CnodeService
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -14,13 +13,7 @@ open class HomeRepository @Inject constructor(private val cnodeService: CnodeSer
     val pageSize = 10
     val topicsPath = "topics"
 
-    fun getTopics(data: MutableLiveData<List<Topics.Data>>, currentPage: Int) {
-        cnodeService.topicsList(topicsPath, currentPage, pageSize, false)
-                .subscribeOn((Schedulers.io()))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { data.value = it.data },
-                        {},
-                        {})
+    fun getTopics(currentPage: Int): LiveData<ApiResponse<List<Topics>>> {
+        return cnodeService.topicsList(topicsPath, currentPage, pageSize, false)
     }
 }

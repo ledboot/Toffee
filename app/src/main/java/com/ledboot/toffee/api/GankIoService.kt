@@ -1,4 +1,4 @@
-package com.ledboot.toffee.service
+package com.ledboot.toffee.api
 
 import com.ledboot.toffee.model.Girls
 import io.reactivex.Flowable

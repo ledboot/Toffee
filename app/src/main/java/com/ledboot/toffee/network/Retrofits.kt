@@ -3,8 +3,8 @@ package com.ledboot.toffee.network
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.ledboot.toffee.service.CnodeService
-import com.ledboot.toffee.service.GankIoService
+import com.ledboot.toffee.api.CnodeService
+import com.ledboot.toffee.api.GankIoService
 import com.ledboot.toffee.utils.Debuger
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
